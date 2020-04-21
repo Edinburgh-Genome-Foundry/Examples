@@ -1,0 +1,38 @@
+LOCUS       .                         43 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    12..32
+                     /role="constraint"
+                     /label="@No BsmBI"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..43
+                     /role="constraint"
+                     /label="@keep"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..43
+                     /role="objective"
+                     /label="~keep"
+                     /color="#f9cd60"
+                     /ApEinfo_fwdcolor="#f9cd60"
+                     /ApEinfo_revcolor="#f9cd60"
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="CGAA"
+     feature         33..36
+                     /label="ACGA"
+     feature         complement(38..43)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacga atggttagtc tatgccgcaa aaacgatgag acg
+//

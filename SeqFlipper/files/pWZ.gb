@@ -1,0 +1,12 @@
+LOCUS       pWZ                       21 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pWZ
+VERSION     pWZ
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 tggttagtct atgccgcaaa a
+//

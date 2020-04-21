@@ -1,0 +1,12 @@
+LOCUS       pSV                       60 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pSV
+VERSION     pSV
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 cattgaacgg gaccacgtgc tttcattcat gtagctcgag gaaagatggc gcctcccgtc
+//

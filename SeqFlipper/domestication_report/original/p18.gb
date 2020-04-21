@@ -1,0 +1,20 @@
+LOCUS       p18                       52 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p18
+VERSION     p18
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="CGGT"
+     feature         42..45
+                     /label="GTGC"
+     feature         complement(47..52)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacgg tgtacaagac ccgtaagtag cgccccgtgg cgtgctgaga cg
+//

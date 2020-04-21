@@ -1,0 +1,9 @@
+LOCUS       Mockbone                  50 bp ds-DNA     circular     21-APR-2020
+DEFINITION  .
+ACCESSION   HC_Amp_ccdB
+FEATURES             Location/Qualifiers
+     Feature         1..50
+                     /label="Mockbone"
+ORIGIN
+        1 agcggccgtc tcaacgataa cgagagaatt cgtcatagga gagacgcaat
+//

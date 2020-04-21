@@ -1,0 +1,21 @@
+LOCUS       .                        101 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="TAGG"
+     feature         91..94
+                     /label="ATGG"
+     feature         complement(96..101)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcatag gaccccgcgt gttgggttcg gtcctcagtg cctaaggaaa gcgctcgctg
+       61 gctagaaaac tatctaggag tccacggtag atggtgagac g
+//

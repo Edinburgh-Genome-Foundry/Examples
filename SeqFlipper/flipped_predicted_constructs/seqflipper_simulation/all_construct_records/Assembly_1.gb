@@ -1,0 +1,159 @@
+LOCUS       Assembly_1               461 bp    DNA     circular UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   Assembly_1
+VERSION     Assembly_1
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     homology        1..4
+                     /label="TAGG"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    5..83
+                     /source="p1"
+                     /indicates_part=True
+                     /note="From p1"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        84..87
+                     /label="ATGG"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    88..112
+                     /source="p2"
+                     /indicates_part=True
+                     /note="From p2"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        113..116
+                     /label="GACT"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    117..125
+                     /source="pCL"
+                     /indicates_part=True
+                     /note="From pCL"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        126..129
+                     /label="CGTC"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    130..154
+                     /source="p12"
+                     /indicates_part=True
+                     /note="From p12"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        155..158
+                     /label="TCAC"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    complement(159..167)
+                     /source="p17"
+                     /indicates_part=True
+                     /note="From p17"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        168..171
+                     /label="GAGC"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    complement(172..186)
+                     /source="p16"
+                     /indicates_part=True
+                     /note="From p16"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        187..190
+                     /label="AGGG"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    complement(191..250)
+                     /source="p15"
+                     /indicates_part=True
+                     /note="From p15"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        251..254
+                     /label="TTGC"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    complement(255..284)
+                     /source="p14"
+                     /indicates_part=True
+                     /note="From p14"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        285..288
+                     /label="GTAG"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    complement(289..297)
+                     /source="p13"
+                     /indicates_part=True
+                     /note="From p13"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        298..301
+                     /label="CGGT"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    302..331
+                     /source="p18"
+                     /indicates_part=True
+                     /note="From p18"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        332..335
+                     /label="GTGC"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    336..395
+                     /source="pSV"
+                     /indicates_part=True
+                     /note="From pSV"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        396..399
+                     /label="GTTG"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    400..414
+                     /source="p22"
+                     /indicates_part=True
+                     /note="From p22"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        415..418
+                     /label="CGAA"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    419..439
+                     /source="pWZ"
+                     /indicates_part=True
+                     /note="From pWZ"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+     homology        440..443
+                     /label="ACGA"
+                     /color="#f7e8f7"
+                     /ApEinfo_fwdcolor="#f7e8f7"
+     misc_feature    444..461
+                     /source="HC_mockbone"
+                     /indicates_part=True
+                     /note="From HC_mockbone"
+                     /color="white"
+                     /ApEinfo_fwdcolor="white"
+ORIGIN
+        1 taggaccccg cgtgttgggt tcggtcctca gtgcctaagg aaagcgctcg ctggctagaa
+       61 aactatctag gagtccacgg tagatgggtg cactctagag ttttgacgga gggacttaaa
+      121 tcgtacgtcc cgtgagttaa acgtgcggct cacgtcacgt gacttatgag cccccggggg
+      181 gtttaaaggg cgtggttgtc cctgagttca tggggccgta aagtcgcgcc gtatgtaccc
+      241 agcagaacct ttgcttgatc ctccagtgaa tgcagggggt cggggtagtt ccggcaacgg
+      301 tgtacaagac ccgtaagtag cgccccgtgg cgtgccattg aacgggacca cgtgctttca
+      361 ttcatgtagc tcgaggaaag atggcgcctc ccgtcgttga tagtgagtgg gtagcgaatg
+      421 gttagtctat gccgcaaaaa cgataacgag agaattcgtc a
+//

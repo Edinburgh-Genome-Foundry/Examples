@@ -1,0 +1,12 @@
+LOCUS       pCL                        9 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pCL
+VERSION     pCL
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 taaatcgta
+//

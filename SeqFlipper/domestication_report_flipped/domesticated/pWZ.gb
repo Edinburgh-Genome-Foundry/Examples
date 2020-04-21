@@ -1,0 +1,20 @@
+LOCUS       pWZ                       43 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pWZ
+VERSION     pWZ
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="CGAA"
+     feature         33..36
+                     /label="ACGA"
+     feature         complement(38..43)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacga atggttagtc tatgccgcaa aaacgatgag acg
+//

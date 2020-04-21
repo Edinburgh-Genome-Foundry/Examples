@@ -1,0 +1,14 @@
+LOCUS       Mockbone                  50 bp    ds-DNA  circular UNK 21-APR-2020
+DEFINITION  .
+ACCESSION   HC_mockbone
+VERSION     HC_mockbone
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     Feature         1..50
+                     /label="Mockbone"
+ORIGIN
+        1 agcggccgtc tcaacgataa cgagagaatt cgtcatagga gagacgcaat
+//

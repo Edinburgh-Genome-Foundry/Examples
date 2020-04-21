@@ -1,0 +1,20 @@
+LOCUS       pCL                       31 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pCL
+VERSION     pCL
+KEYWORDS    .
+SOURCE      
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="GACT"
+     feature         21..24
+                     /label="CGTC"
+     feature         complement(26..31)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcagac ttaaatcgta cgtctgagac g
+//

@@ -1,0 +1,21 @@
+LOCUS       pSV                       82 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   pSV
+VERSION     pSV
+KEYWORDS    .
+SOURCE      
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     feature         1..6
+                     /label="BsmBI"
+     feature         8..11
+                     /label="GTGC"
+     feature         72..75
+                     /label="GTTG"
+     feature         complement(77..82)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcagtg ccattgaacg ggaccacgtg ctttcattca tgtagctcga ggaaagatgg
+       61 cgcctcccgt cgttgtgaga cg
+//

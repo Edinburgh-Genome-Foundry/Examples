@@ -1,0 +1,2 @@
+assembly_name,construct_id,assembly_level,construct_size,number_of_parts,depends_on,enzymes,used_in,parts
+Assembly_1,Assembly_1,1,461,14,,BsmBI,,p1 & p2 & pCL & p12 & p13 & p14 & p15 & p16 & p17 & p18 & pSV & p22 & pWZ & HC_mockbone
