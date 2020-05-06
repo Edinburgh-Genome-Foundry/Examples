@@ -13,11 +13,7 @@ def differentiate_sequences(seq):
     seq_codons = genealloy.convert_seq_to_codons(seq)
     seq_aa = [genealloy.codon_to_aa[triplet] for triplet in seq_codons]
 
-    aa_to_codon = {}
-    for aa in set(genealloy.codon_to_aa.values()):
-        aa_to_codon[aa] = []
-    for codon, aa in genealloy.codon_to_aa.items():
-        aa_to_codon[aa].append(codon)
+    aa_to_codon = generate_aa_to_codon(genealloy.codon_to_aa)
 
     modified_triplets = []
     for i, aa in enumerate(seq_aa):
@@ -31,3 +27,14 @@ def differentiate_sequences(seq):
     modified_seq = "".join(modified_triplets)
 
     return modified_seq
+
+
+def generate_aa_to_codon(codon_to_aa):
+    aa_to_codon = {}
+
+    for aa in set(codon_to_aa.values()):
+        aa_to_codon[aa] = []
+    for codon, aa in codon_to_aa.items():
+        aa_to_codon[aa].append(codon)
+
+    return aa_to_codon
