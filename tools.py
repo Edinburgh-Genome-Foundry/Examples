@@ -57,3 +57,40 @@ def generate_aa_to_codon(codon_to_aa):
         aa_to_codon[aa].append(codon)
 
     return aa_to_codon
+
+
+def find_best_match(seq, ref):
+    """Find alignment with smallest Levenshtein distance between seq and ref.
+    Return a dictionary of distances and positions of best matches.
+
+    Parameters
+    ----------
+
+    seq
+      A string
+
+    ref
+      A string, not shorter than seq
+    """
+
+    if not _has_rapidfuzz:
+        raise ImportError("Function requires the rapidfuzz package.")
+
+    if len(seq) > len(ref):
+        raise ValueError("`ref` is shorter than `seq`")
+
+    distances = {}
+    for i in range(0, len(ref) - len(seq) + 1):  # moving window of comparison
+        distance = rapidfuzz.levenshtein.distance(seq, ref[i : (i + len(seq))])
+        distances[(i, i + len(seq))] = distance
+
+    shortest_distance = min(distances.values())
+
+    best_matches = {distance: shortest_distance, "locations": []}
+    for location, distance in distances.items():
+        if distance == shortest_distance:
+            best_matches["locations"].append(location)
+
+    results = {"distances": distances, "best_matches": best_matches}
+
+    return results
