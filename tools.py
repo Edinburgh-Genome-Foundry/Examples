@@ -127,3 +127,18 @@ def find_best_match(seq, ref):
     results = {"distances": distances, "best_matches": best_matches}
 
     return results
+
+
+def modify_seq(seq, skip_first=False, skip_last=False):
+    if skip_first:
+        start = 3
+    else:
+        start = 0
+    if skip_last:
+        stop = -3
+    else:
+        stop = len(seq)
+
+    modified_seq = seq[start:stop]
+
+    return modified_seq
