@@ -8,16 +8,39 @@ else:
     _has_rapidfuzz = True
 
 
-def differentiate_sequences(seq, verbose=True):
-    """Replace codons with synonymous codons in a sequence (keep translation)"""
+def differentiate_sequences(seq, ref=None, verbose=True):
+    """Replace each codon in a sequence with a synonymous codon that does not match the 
+    reference sequence.
+
+    Return a dictionary with a list of possible codons for each position, and also a 
+    possible solution.
+
+    Parameters
+    ----------
+
+    seq
+      A string of ATGC characters, with length divisible by 3.
+
+    ref
+      A string of ATGC characters, with same length as seq. If None, use seq. 
+
+    verbose
+      Print aa sequence and Levenshtein distances. 
+    """
+
+    if ref is None:
+        ref = seq
 
     verboseprint = print if verbose else lambda *a, **k: None
 
     if len(seq) % 3 != 0:
-        return "Sequence length must be divisible by 3"
+        raise ValueError("Sequence length must be divisible by 3")
 
-    if set(seq) - {"A", "C", "G", "T"} != set():
-        return "The sequence must contain only A,T,G,C"
+    if len(seq) != len(ref):
+        raise ValueError("`seq` and `ref` must be the same length")
+
+    if set(seq + ref) - {"A", "C", "G", "T"} != set():
+        raise ValueError("The sequences must contain only A,T,G,C")
 
     seq_codons = genealloy.convert_seq_to_codons(seq)
     seq_aa = [genealloy.codon_to_aa[triplet] for triplet in seq_codons]
@@ -26,26 +49,36 @@ def differentiate_sequences(seq, verbose=True):
 
     aa_to_codon = generate_aa_to_codon(genealloy.codon_to_aa)
 
-    modified_triplets = []
-    for i, aa in enumerate(seq_aa):
-        replacement = seq_codons[i]
-        for triplet in aa_to_codon[aa]:
-            if triplet != seq_codons[i]:
-                replacement = triplet
-                break
-        modified_triplets.append(replacement)
+    modified_seq_codons = []
+    for i, triplet in enumerate(seq_codons):
+        ref_triplet = ref[i * 3 : i * 3 + 3]
+        if triplet != ref_triplet:
+            replacement = [triplet]
+        else:
+            replacement = []
+            aa = genealloy.codon_to_aa[triplet]
+            for codon in aa_to_codon[aa]:
+                if codon != ref_triplet:
+                    replacement.append(codon)
+            if len(replacement) == 0:
+                replacement = [triplet]  # no alternative codon
+        modified_seq_codons.append(replacement)
 
-    modified_seq = "".join(modified_triplets)
+    modified_seq = "".join([codons[0] for codons in modified_seq_codons])
 
     if _has_rapidfuzz:
         verboseprint(
-            "Levenshtein distance of old and new sequence:",
-            rapidfuzz.levenshtein.distance(seq, modified_seq),
+            "Levenshtein distance (seq vs ref):",
+            rapidfuzz.levenshtein.distance(seq, ref),
+        )
+        verboseprint(
+            "Levenshtein distance (modified seq vs ref):",
+            rapidfuzz.levenshtein.distance(modified_seq, ref),
         )
     else:
         verboseprint("Levenshtein distance requires the rapidfuzz package")
 
-    return modified_seq
+    return {"solution": modified_seq, "codons": modified_seq_codons}
 
 
 def generate_aa_to_codon(codon_to_aa):
