@@ -142,3 +142,27 @@ def modify_seq(seq, skip_first=False, skip_last=False):
     modified_seq = seq[start:stop]
 
     return modified_seq
+
+
+
+def find_longest_repeat(seq):
+    """Find the longest repeat in a string, 
+    then return the length and the character in a tuple.
+    """
+    maximum = 0
+    count = 0
+    current = ''
+    letter = ''
+
+    for nt in seq:
+        if nt == current:
+            count += 1
+        else:
+            count = 1
+            current = nt
+
+        if count > maximum:
+            letter = nt
+        maximum = max(count, maximum)
+
+    return (maximum, letter)
