@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def make_dict_lowercase(dictionary):
     """Make dictionary lowercase"""
     lowercase_dict = {
