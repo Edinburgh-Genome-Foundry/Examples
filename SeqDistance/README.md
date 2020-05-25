@@ -35,7 +35,7 @@ The module will be expanded in the future to use nonzero penalty values for cons
     seq1 = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
     seq2 = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
 
-    lev(seq1,seq2, substitute_costs=nt_substitute_costs)
+    lev(seq1, seq2, substitute_costs=nt_substitute_costs)
     # returns 2
 
 

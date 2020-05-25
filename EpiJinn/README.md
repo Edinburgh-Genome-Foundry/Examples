@@ -77,7 +77,7 @@ The same approach can be used for finding enzyme site overlaps with other epigen
     thio = epijinn.Methylator(sequence, epijinn.dnd, site_BsmBI)
     thio.find_methylation_sites_in_pattern()
 
-This returns an overlap with a putative *dnd* target site of *Streptomyces lividans 1326*'*  with conserved sequence GGCC:
+This returns an overlap with a putative *dnd* target site of *Streptomyces lividans 1326* with conserved sequence GGCC:
 
     Dnd_Sli1326
     ===========
