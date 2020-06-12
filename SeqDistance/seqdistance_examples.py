@@ -34,3 +34,13 @@ lev(seq, ref, substitute_costs=nt_substitute_costs)
 hamming(seq, ref)
 # {'Hamming distance': 0.0, 'match_positions': {6: 'ATGGATCGGCGGGCG'}}
 ########################################################################################
+
+# Calculate distance for complement sequences
+from Examples.EpiJinn import epijinn
+seq = 'AAAAAAAAAACCC'
+ref = 'GGGTTTTTTTTTT'
+print(lev(seq, ref, substitute_costs=nt_substitute_costs))
+# 13.0
+seq_rc = epijinn.Methylase.reverse_complement(seq)
+print(lev(seq_rc, ref, substitute_costs=nt_substitute_costs))
+# 0.0
