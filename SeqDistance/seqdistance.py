@@ -42,3 +42,34 @@ def make_letter_to_letter_matches(code_to_nt):
                 )
 
     return letter_to_letter_matches
+
+
+def hamming(seq, ref, substitute_costs=None):
+    """Calculate Hamming distance
+
+    Parameters
+    ----------
+
+    seq
+      string
+    
+    ref
+      string
+    
+    substitute_costs
+      numpy array (128*128) of substitution costs. The indexes are the ord() values of 
+      the first 128 ASCII characters. Note that self-substitution can also be assigned 
+      a cost.
+    """
+    if len(seq) != len(ref):
+        raise ValueError("seq and ref must have same length!")
+
+    if substitute_costs is None:
+        substitute_costs = np.ones((128, 128), dtype=np.float64)
+        np.fill_diagonal(substitute_costs, 0)  # self-matches
+
+    distance = 0
+    for i, letter in enumerate(seq):
+        distance += substitute_costs[ord(letter), ord(ref[i])]
+
+    return distance

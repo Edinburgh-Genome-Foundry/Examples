@@ -4,7 +4,7 @@
 
 ## Background
 
-Using a substitution matrix for extended nucleotide letters, the following sequences have a Levenshtein distance 3 (and not 7), because the extended nucleotide S = C or G, and case is ignored (t = T).
+Using a substitution matrix for extended nucleotide letters, the Levenshtein distance between the following sequences is 3 (and not 7), because the extended nucleotide S = C or G, and case is ignored (t = T).
 
     ATCAGSCtgTAGCAA
     |||  |||| |||||
@@ -36,7 +36,7 @@ The module will be expanded in the future to use nonzero penalty values for cons
     seq2 = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
 
     lev(seq1, seq2, substitute_costs=nt_substitute_costs)
-    # returns 2
+    # returns 2.0
 
 
     # Amino acids
@@ -45,4 +45,9 @@ The module will be expanded in the future to use nonzero penalty values for cons
 
     aa_substitute_costs = seqdistance.make_penalty_table(genealloy.allowed_aa_transitions)
     lev(aa1, aa2, substitute_costs=aa_substitute_costs)
-    # returns 0
+    # returns 0.0
+
+
+    # The module has an implementation of the Hamming distance too:
+    seqdistance.hamming(seq1, seq2, substitute_costs=nt_substitute_costs)
+    # returns 2.0
