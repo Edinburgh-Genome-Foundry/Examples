@@ -49,5 +49,9 @@ The module will be expanded in the future to use nonzero penalty values for cons
 
 
     # The module has an implementation of the Hamming distance too:
-    seqdistance.hamming(seq1, seq2, substitute_costs=nt_substitute_costs)
+    seqdistance.hamming(seq1, seq2, substitute_costs=nt_substitute_costs, verbose=True)
     # returns 2.0
+    # prints:
+    # ATGGATCGGCGGGCGAGSCtgATAAGGTGCTAGCTAAAAAAAAAAAA
+    # |||||||||||||||  ||||||||||||||||||||||||||||||
+    # ATGGATCGGCGGGCGTTCSTSATAAGGTGCTAGCTAAAAAAAAAAAA
