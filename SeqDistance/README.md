@@ -23,19 +23,13 @@ The module will be expanded in the future to use nonzero penalty values for cons
 ## Usage
 
     import seqdistance
-    import genealloy
     from weighted_levenshtein import lev
 
     # Nucleotides
-    letter_to_letter_matches_uppercase = seqdistance.make_letter_to_letter_matches(genealloy.ambiguity_code_to_nt_set)
-    # include both lower and upper case:
-    letter_to_letter_matches = seqdistance.make_dict_both_case(letter_to_letter_matches_uppercase)
-    nt_substitute_costs = seqdistance.make_penalty_table(letter_to_letter_matches)
+    seq = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
+    ref = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
 
-    seq1 = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
-    seq2 = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
-
-    lev(seq1, seq2, substitute_costs=nt_substitute_costs)
+    lev(seq, ref, substitute_costs=seqdistance.nt_substitute_costs)
     # returns 2.0
 
 
@@ -43,13 +37,12 @@ The module will be expanded in the future to use nonzero penalty values for cons
     aa1 = 'HGE'  # tripeptide
     aa2 = 'HGD'
 
-    aa_substitute_costs = seqdistance.make_penalty_table(genealloy.allowed_aa_transitions)
-    lev(aa1, aa2, substitute_costs=aa_substitute_costs)
+    lev(aa1, aa2, substitute_costs=seqdistance.aa_substitute_costs)
     # returns 0.0
 
 
     # The module has an implementation of the Hamming distance too:
-    seqdistance.hamming(seq1, seq2, substitute_costs=nt_substitute_costs, verbose=True)
+    seqdistance.hamming(seq, ref, substitute_costs=seqdistance.nt_substitute_costs, verbose=True)
     # returns 2.0
     # prints:
     # ATGGATCGGCGGGCGAGSCtgATAAGGTGCTAGCTAAAAAAAAAAAA

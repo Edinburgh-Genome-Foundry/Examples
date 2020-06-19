@@ -79,9 +79,70 @@ def hamming(seq, ref, substitute_costs=None, verbose=False):
         print(seq)
         alignment = ""
         for i, letter in enumerate(seq):
-            match = '|' if substitute_costs[ord(letter), ord(ref[i])] == 0 else ' '
+            match = "|" if substitute_costs[ord(letter), ord(ref[i])] == 0 else " "
             alignment += match
         print(alignment)
         print(ref)
 
     return distance
+
+
+"""Extended nucleotide letter to nucleotide letter dictionary"""
+ambiguity_code_to_nt_set = {
+    "A": {"A"},
+    "G": {"G"},
+    "C": {"C"},
+    "T": {"T"},
+    "Y": {"C", "T"},
+    "R": {"A", "G"},
+    "W": {"A", "T"},
+    "S": {"G", "C"},
+    "K": {"T", "G"},
+    "M": {"C", "A"},
+    "D": {"A", "G", "T"},
+    "V": {"A", "C", "G"},
+    "H": {"A", "C", "T"},
+    "B": {"C", "G", "T"},
+    "X": {"A", "C", "G", "T"},
+    "N": {"A", "C", "G", "T"},
+}
+
+
+allowed_aa_transitions = {
+    "A": ["G", "A", "V", "L", "I"],
+    "B": ["D", "E", "N", "Q", "B", "Z"],
+    "C": ["S", "C", "M", "T"],
+    "D": ["D", "E", "N", "Q", "B", "Z"],
+    "E": ["D", "E", "N", "Q", "B", "Z"],
+    "F": ["F", "Y", "W"],
+    "G": ["G", "A", "V", "L", "I"],
+    "H": ["H", "K", "R"],
+    "I": ["G", "A", "V", "L", "I"],
+    #     'J': ['J'],
+    "K": ["H", "K", "R"],
+    "L": ["G", "A", "V", "L", "I"],
+    "M": ["S", "C", "M", "T"],
+    "N": ["D", "E", "N", "Q", "B", "Z"],
+    #     'O': ['O'],
+    "P": ["P"],
+    "Q": ["D", "E", "N", "Q", "B", "Z"],
+    "R": ["H", "K", "R"],
+    "S": ["S", "C", "M", "T"],
+    "T": ["S", "C", "M", "T"],
+    # "U": ['S', 'C', 'U', 'M', 'T'],
+    "V": ["G", "A", "V", "L", "I"],
+    "W": ["F", "Y", "W"],
+    "X": ["X"],
+    "Y": ["F", "Y", "W"],
+    "Z": ["D", "E", "N", "Q", "B", "Z"],
+    ".": ["."],
+    "*": ["*"],
+}
+
+
+letter_to_letter_matches_uppercase = make_letter_to_letter_matches(
+    ambiguity_code_to_nt_set
+)
+letter_to_letter_matches = make_dict_both_case(letter_to_letter_matches_uppercase)
+nt_substitute_costs = make_penalty_table(letter_to_letter_matches)
+aa_substitute_costs = make_penalty_table(allowed_aa_transitions)
