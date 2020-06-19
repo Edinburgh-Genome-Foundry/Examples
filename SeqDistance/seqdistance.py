@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 
 
 def make_dict_lowercase(dictionary):
@@ -85,6 +86,41 @@ def hamming(seq, ref, substitute_costs=None, verbose=False):
         print(ref)
 
     return distance
+
+
+def substitute_costs_from_csv(filepath):
+    """Make penalty table from csv file
+    
+    Parameters
+    ----------
+    
+    filepath
+      Path to csv file. Rows: original letter. Columns: replacement letters.
+      Format: 
+      ,A,R,N ...
+      A,13,3,4
+      R,6,17,4
+      N,9,4,6
+      ...
+    """
+    with open(filepath) as f:
+        ncols = len(f.readline().split(","))
+    matrix = np.loadtxt(filepath, delimiter=",", usecols=range(1, ncols), skiprows=1)
+    if not matrix.shape[0] == matrix.shape[1]:
+        raise ValueError("Input is not square matrix")
+
+    with open(filepath, newline='') as f:
+        reader = csv.reader(f)
+        row1 = next(reader)
+    row1.pop(0)
+
+    substitute_costs = np.ones((128, 128), dtype=np.float64)
+
+    for i, from_letter in enumerate(row1):  # row (from)
+        for j, to_letter in enumerate(row1):  # column (to)
+            substitute_costs[ord(from_letter), ord(to_letter)] = matrix[i, j]
+
+    return substitute_costs
 
 
 """Extended nucleotide letter to nucleotide letter dictionary"""
