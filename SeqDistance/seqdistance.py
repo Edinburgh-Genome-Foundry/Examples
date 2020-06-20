@@ -1,5 +1,6 @@
-import numpy as np
+import os
 import csv
+import numpy as np
 
 
 def make_dict_lowercase(dictionary):
@@ -8,6 +9,14 @@ def make_dict_lowercase(dictionary):
         k.lower(): set(l.lower() for l in v) for k, v in dictionary.items()
     }
     return lowercase_dict
+
+
+def make_dict_uppercase(dictionary):
+    """Make dictionary uppercase"""
+    uppercase_dict = {
+        k.upper(): set(l.upper() for l in v) for k, v in dictionary.items()
+    }
+    return uppercase_dict
 
 
 def make_dict_both_case(dictionary):
@@ -88,7 +97,7 @@ def hamming(seq, ref, substitute_costs=None, verbose=False):
     return distance
 
 
-def substitute_costs_from_csv(filepath):
+def get_substitute_costs_from_csv(filepath):
     """Make penalty table from csv file
     
     Parameters
@@ -109,7 +118,7 @@ def substitute_costs_from_csv(filepath):
     if not matrix.shape[0] == matrix.shape[1]:
         raise ValueError("Input is not square matrix")
 
-    with open(filepath, newline='') as f:
+    with open(filepath, newline="") as f:
         reader = csv.reader(f)
         row1 = next(reader)
     row1.pop(0)
@@ -121,6 +130,94 @@ def substitute_costs_from_csv(filepath):
             substitute_costs[ord(from_letter), ord(to_letter)] = matrix[i, j]
 
     return substitute_costs
+
+
+def count_matches(seq_matches, ref_matches, substitute_costs):
+    matches = 0
+    for s in seq_matches:
+        for r in ref_matches:
+            if s == r:
+                matches += 1
+    return matches
+
+
+def count_substitution_cost(seq_matches, ref_matches, substitute_costs):
+    substitution_cost = 0
+    for s in seq_matches:
+        for r in ref_matches:
+            substitution_cost += substitute_costs[ord(r), ord(s)]
+    return substitution_cost
+
+
+def get_uncertainty_costs(ambiguity_code_to_nt_set, substitute_costs=None):
+    """Calculate substitution matrix where extended letters encode uncertainty
+    
+    Parameters
+    ----------
+    
+    ambiguity_code_to_nt_set
+      dict of extended letter: {matches}. All letters must be uppercase. 
+      (Use make_dict_uppercase())
+
+    substitute_costs
+        numpy array of substitute costs between the standard letters. Defaults to 1.
+    """
+    if substitute_costs is None:
+        substitute_costs = np.ones((128, 128), dtype=np.float64)
+        np.fill_diagonal(substitute_costs, 0)  # self-matches
+
+    uncertainty_substitute_costs = np.ones((128, 128), dtype=np.float64)
+
+    for seq_letter, seq_matches in ambiguity_code_to_nt_set.items():
+        for ref_letter, ref_matches in ambiguity_code_to_nt_set.items():
+            len_seq_letter = len(seq_matches)
+            len_ref_letter = len(ref_matches)
+            cases = len_seq_letter * len_ref_letter
+            substitution_cost = count_substitution_cost(
+                seq_matches, ref_matches, substitute_costs
+            )
+            scaled_penalty = substitution_cost / cases
+            uncertainty_substitute_costs[
+                ord(ref_letter), ord(seq_letter)
+            ] = scaled_penalty
+            uncertainty_substitute_costs[
+                ord(seq_letter), ord(ref_letter)
+            ] = scaled_penalty  # symmetric case
+
+    # modify table for upper-lower; lower-upper; lower-lower case matches
+    for key in ambiguity_code_to_nt_set.keys():
+        for key_ref in ambiguity_code_to_nt_set.keys():
+            # upper-lower
+            uncertainty_substitute_costs[
+                ord(key_ref), ord(key.lower())
+            ] = uncertainty_substitute_costs[ord(key_ref), ord(key)]
+
+            # symmetric case
+            uncertainty_substitute_costs[
+                ord(key.lower()), ord(key_ref)
+            ] = uncertainty_substitute_costs[ord(key_ref), ord(key)]
+
+            # lower-upper
+            uncertainty_substitute_costs[
+                ord(key_ref.lower()), ord(key)
+            ] = uncertainty_substitute_costs[ord(key_ref), ord(key)]
+
+            # symmetric case
+            uncertainty_substitute_costs[
+                ord(key), ord(key_ref.lower())
+            ] = uncertainty_substitute_costs[ord(key), ord(key_ref)]
+
+            # lower-lower
+            uncertainty_substitute_costs[
+                ord(key_ref.lower()), ord(key.lower())
+            ] = uncertainty_substitute_costs[ord(key_ref), ord(key)]
+
+            # symmetric case
+            uncertainty_substitute_costs[
+                ord(key.lower()), ord(key_ref.lower())
+            ] = uncertainty_substitute_costs[ord(key), ord(key_ref)]
+
+    return uncertainty_substitute_costs
 
 
 """Extended nucleotide letter to nucleotide letter dictionary"""
@@ -182,3 +279,11 @@ letter_to_letter_matches_uppercase = make_letter_to_letter_matches(
 letter_to_letter_matches = make_dict_both_case(letter_to_letter_matches_uppercase)
 nt_substitute_costs = make_penalty_table(letter_to_letter_matches)
 aa_substitute_costs = make_penalty_table(allowed_aa_transitions)
+
+filepath = os.path.join(os.path.dirname(__file__), "tables", "pam250.csv")
+pam250 = get_substitute_costs_from_csv(filepath)
+
+uncertainty_substitute_costs = get_uncertainty_costs(
+    ambiguity_code_to_nt_set, substitute_costs=None
+)
+

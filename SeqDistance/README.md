@@ -4,11 +4,29 @@
 
 ## Background
 
-Using a substitution matrix for extended nucleotide letters, the Levenshtein distance between the following sequences is 3 (and not 7), because the extended nucleotide S = C or G, and case is ignored (t = T).
+### Nucleotides
+
+In a sequence, an extended nucleotide letter (for example, S = C or G) can mean one of two things: 
+* (1) all encoded values match: substitution score = 0
+* (2) there is uncertainty: for example, in the case of S, it's not known whether the nucleotide is C or G, but it's known that it is not A nor T
+
+Interpreting letters as in the first case (1) and using a substitution matrix for extended nucleotide letters, the Levenshtein distance between the following sequences is 3 (and not 7), because the extended nucleotide S = C or G, and case is ignored (t = T).
 
     ATCAGSCtgTAGCAA
     |||  |||| |||||
     ATCTTCSTSGAGCAA
+
+
+In the second case (2), the Levenshtein distance is 4.5:
+
+    ATCAGSCtgTAGCAA
+    |||  ??|? |||||
+    ATCTTCSTSGAGCAA
+
+The penalty for each letter-pair is calculated by dividing the sum of penalties of each combination by the total number of possible combinations. The letter S means C or G, so there is 50% chance that it matches C. 100%-50% = 50%, so there is also chance for a non-match, therefore the penalty is 0.5.
+
+
+### Amino acids
 
 Similarly, one can define a substitution matrix for *conservative amino acid replacements.*
 Applying that matrix, the distance in the example below is 0, because Glu (E) is a conservative replacement of Asp (D).
@@ -17,7 +35,7 @@ Applying that matrix, the distance in the example below is 0, because Glu (E) is
     |||
     HGD
 
-The module will be expanded in the future to use nonzero penalty values for conservative replacements.
+The module contains penalty values for the PAM250 scoring matrix and can generate a substitution matrix for any scoring matrix from a csv file.
 
 
 ## Usage
@@ -25,7 +43,7 @@ The module will be expanded in the future to use nonzero penalty values for cons
     import seqdistance
     from weighted_levenshtein import lev
 
-    # Nucleotides
+    # NUCLEOTIDES
     seq = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
     ref = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
 
@@ -33,7 +51,11 @@ The module will be expanded in the future to use nonzero penalty values for cons
     # returns 2.0
 
 
-    # Amino acids
+    lev(seq, ref, substitute_costs=seqdistance.uncertainty_substitute_costs)
+    # returns 3.5
+
+
+    # AMINO ACIDS
     aa1 = 'HGE'  # tripeptide
     aa2 = 'HGD'
 
