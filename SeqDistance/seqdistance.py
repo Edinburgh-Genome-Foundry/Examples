@@ -97,7 +97,7 @@ def hamming(seq, ref, substitute_costs=None, verbose=False):
     return distance
 
 
-def get_substitute_costs_from_csv(filepath):
+def get_substitute_costs_from_csv(filepath, scale=True):
     """Make penalty table from csv file
     
     Parameters
@@ -111,12 +111,22 @@ def get_substitute_costs_from_csv(filepath):
       R,6,17,4
       N,9,4,6
       ...
+      The higher the score, the more similar the characters are.
+
+    scale
+      If True, do max-min scaling to 0-1, so that highest score has 0 penalty value.
     """
     with open(filepath) as f:
         ncols = len(f.readline().split(","))
     matrix = np.loadtxt(filepath, delimiter=",", usecols=range(1, ncols), skiprows=1)
     if not matrix.shape[0] == matrix.shape[1]:
         raise ValueError("Input is not square matrix")
+
+    if scale:
+        matrix -= matrix.min()
+        matrix /= matrix.ptp()  # min-max normalization
+        matrix = 1 - matrix  # reverse so that highest score has 0 penalty
+
 
     with open(filepath, newline="") as f:
         reader = csv.reader(f)
@@ -286,4 +296,3 @@ pam250 = get_substitute_costs_from_csv(filepath)
 uncertainty_substitute_costs = get_uncertainty_costs(
     ambiguity_code_to_nt_set, substitute_costs=None
 )
-
