@@ -290,9 +290,6 @@ letter_to_letter_matches = make_dict_both_case(letter_to_letter_matches_uppercas
 nt_substitute_costs = make_penalty_table(letter_to_letter_matches)
 aa_substitute_costs = make_penalty_table(allowed_aa_transitions)
 
-filepath = os.path.join(os.path.dirname(__file__), "tables", "pam250.csv")
-pam250 = get_substitute_costs_from_csv(filepath)
-
 uncertainty_substitute_costs = get_uncertainty_costs(
     ambiguity_code_to_nt_set, substitute_costs=None
 )
