@@ -127,7 +127,6 @@ def get_substitute_costs_from_csv(filepath, scale=True):
         matrix /= matrix.ptp()  # min-max normalization
         matrix = 1 - matrix  # reverse so that highest score has 0 penalty
 
-
     with open(filepath, newline="") as f:
         reader = csv.reader(f)
         row1 = next(reader)
@@ -228,6 +227,46 @@ def get_uncertainty_costs(ambiguity_code_to_nt_set, substitute_costs=None):
             ] = uncertainty_substitute_costs[ord(key), ord(key_ref)]
 
     return uncertainty_substitute_costs
+
+
+def make_translation_table(seq, ref):
+    import string
+
+    letters_input = seq + ref
+    letters = set(letters_input.upper() + letters_input.lower())
+
+    available = list(set(string.printable) - letters)
+
+    lowercase_input = set(letters_input.lower())
+    uppercase_input = set(letters_input.upper())
+    available_subset = available[0 : len(uppercase_input)]
+
+    translation_table_upper = str.maketrans(
+        "".join(sorted(uppercase_input)), "".join(available_subset)
+    )
+    translation_table_lower = str.maketrans(
+        "".join(sorted(lowercase_input)), "".join(available_subset)
+    )
+    translation_table = {**translation_table_lower, **translation_table_upper}
+
+    return translation_table
+
+
+def update_substitute_costs(substitute_costs, translation_table):
+
+    updated_substitute_costs = substitute_costs
+    for number_from in translation_table.keys():
+        for number_to in translation_table.keys():
+            replacement_letter = translation_table[number_to]
+            updated_substitute_costs[
+                number_from, replacement_letter
+            ] = substitute_costs[number_from, number_to]
+            # the reverse case:
+            updated_substitute_costs[
+                replacement_letter, number_from
+            ] = substitute_costs[number_to, number_from]
+
+    return updated_substitute_costs
 
 
 """Extended nucleotide letter to nucleotide letter dictionary"""
