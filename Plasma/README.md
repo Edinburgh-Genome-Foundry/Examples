@@ -16,126 +16,128 @@ Note that in genotype descriptions (e.g. *endA1 glnV44 thi-1 gyrA96 relA1* ...) 
 
 ## Usage
 
-    import plasma
+```python
+import plasma
 
-    vessel = plasma.Vessel()
-    vessel.add_molecule(plasma.Amp)
-    vessel.add_plasmid(plasma.dna["pAmpR"])
-    vessel.add_strain(plasma.strains["TOP10"])
+vessel = plasma.Vessel()
+vessel.add_molecule(plasma.Amp)
+vessel.add_plasmid(plasma.dna["pAmpR"])
+vessel.add_strain(plasma.strains["TOP10"])
 
-    vessel.print_contents()
-    # Temperature: 37
-    # Strains:
-    #     TOP10
-    # Plasmids:
-    #     pAmpR
-    # Molecules:
-    #     Amp
+vessel.print_contents()
+# Temperature: 37
+# Strains:
+#     TOP10
+# Plasmids:
+#     pAmpR
+# Molecules:
+#     Amp
 
-    vessel.transform()
-    vessel.print_transformation_results()
-    # Temperature: 37
-    # Molecules: Amp
-    # 
-    # TOP10 derivatives:
-    # TOP10_variant_0
-    # Genome: TOP10_chr
-    #          araD139 | Interactions: arabinose
-    #          galE15 | Interactions: galactose, two_deoxygalactose
-    #          galK16 | Interactions: galactose, two_deoxygalactose
-    #          rpsL | Interactions: streptomycin
-    #          recA1 
-    #          endA1 
-    #          Deleted F_genes 
-    #          Deleted mcrA 
-    #          Deleted mrr 
-    #          Deleted hsdRMS 
-    #          Deleted mcrBC 
-    #          Deleted lacZ | Interactions: IPTG, Xgal, colour
-    #          Deleted lacX74 
-    #          Deleted nupG 
-    #          Deleted leu | Interactions: leucine
-    #   Plasmids: -
-    # 
-    # TOP10_variant_1
-    # Genome: TOP10_chr
-    #          araD139 | Interactions: arabinose
-    #          galE15 | Interactions: galactose, two_deoxygalactose
-    #          galK16 | Interactions: galactose, two_deoxygalactose
-    #          rpsL | Interactions: streptomycin
-    #          recA1 
-    #          endA1 
-    #          Deleted F_genes 
-    #          Deleted mcrA 
-    #          Deleted mrr 
-    #          Deleted hsdRMS 
-    #          Deleted mcrBC 
-    #          Deleted lacZ | Interactions: IPTG, Xgal, colour
-    #          Deleted lacX74 
-    #          Deleted nupG 
-    #          Deleted leu | Interactions: leucine
-    #   Plasmids/genes:
-    #      pAmpR
-    #        AmpR | Interactions: Amp
-
+vessel.transform()
+vessel.print_transformation_results()
+# Temperature: 37
+# Molecules: Amp
+# 
+# TOP10 derivatives:
+# TOP10_variant_0
+# Genome: TOP10_chr
+#          araD139 | Interactions: arabinose
+#          galE15 | Interactions: galactose, two_deoxygalactose
+#          galK16 | Interactions: galactose, two_deoxygalactose
+#          rpsL | Interactions: streptomycin
+#          recA1 
+#          endA1 
+#          Deleted F_genes 
+#          Deleted mcrA 
+#          Deleted mrr 
+#          Deleted hsdRMS 
+#          Deleted mcrBC 
+#          Deleted lacZ | Interactions: IPTG, Xgal, colour
+#          Deleted lacX74 
+#          Deleted nupG 
+#          Deleted leu | Interactions: leucine
+#   Plasmids: -
+# 
+# TOP10_variant_1
+# Genome: TOP10_chr
+#          araD139 | Interactions: arabinose
+#          galE15 | Interactions: galactose, two_deoxygalactose
+#          galK16 | Interactions: galactose, two_deoxygalactose
+#          rpsL | Interactions: streptomycin
+#          recA1 
+#          endA1 
+#          Deleted F_genes 
+#          Deleted mcrA 
+#          Deleted mrr 
+#          Deleted hsdRMS 
+#          Deleted mcrBC 
+#          Deleted lacZ | Interactions: IPTG, Xgal, colour
+#          Deleted lacX74 
+#          Deleted nupG 
+#          Deleted leu | Interactions: leucine
+#   Plasmids/genes:
+#      pAmpR
+#        AmpR | Interactions: Amp
+```
 
 
 ## Plateo
 
 Plasma can be used with [Plateo](https://edinburgh-genome-foundry.github.io/Plateo/) to evaluate outcome of a transformation in a plate well.
 
-    import plateo
-    from plateo.containers.plates import Plate96
+```python
+import plateo
+from plateo.containers.plates import Plate96
 
-    # We define a correspondence between Plateo well content and Plasma object names:
-    mapping = {"ampicillin": "Amp", "plasmid_amp": "pAmpR", "ampr": "AmpR", "DH5alpha_strain": "DH5alpha"}
-    # mapping values should match plasma.STORE.keys()
+# We define a correspondence between Plateo well content and Plasma object names:
+mapping = {"ampicillin": "Amp", "plasmid_amp": "pAmpR", "ampr": "AmpR", "DH5alpha_strain": "DH5alpha"}
+# mapping values should match plasma.STORE.keys()
 
-    # Prepare the plate and its well:
-    plate = Plate96()
-    components_quantities = {"ampicillin": 1, "plasmid_amp": 1, "ampr": 1, "DH5alpha_strain": 1}
-    plate.well_at_index(1).add_content(components_quantities, volume=1)
+# Prepare the plate and its well:
+plate = Plate96()
+components_quantities = {"ampicillin": 1, "plasmid_amp": 1, "ampr": 1, "DH5alpha_strain": 1}
+plate.well_at_index(1).add_content(components_quantities, volume=1)
 
-    vessel = plasma.prepare_vessel_from_well(plate.well_at_index(1), mapping=mapping)
-    # AmpR is not of class Molecule, Plasmid or Bacterium.
-    vessel.transform()
-    vessel.print_transformation_results()
-    # Temperature: 37
-    # Molecules: Amp
-    # 
-    # DH5alpha derivatives:
-    # DH5alpha_variant_0
-    # Genome: DH5alpha_chr
-    #          gyrA96 | Interactions: nalidixicacid
-    #          endA1 
-    #          recA1 
-    #          purB20 
-    #          Deleted F_genes 
-    #          Deleted supE44 
-    #          Deleted thi | Interactions: thiamine
-    #          Deleted relA 
-    #          Deleted deoR 
-    #          Deleted nupG 
-    #          Deleted hsdR 
-    #   Plasmids: -
-    # 
-    # DH5alpha_variant_1
-    # Genome: DH5alpha_chr
-    #          gyrA96 | Interactions: nalidixicacid
-    #          endA1 
-    #          recA1 
-    #          purB20 
-    #          Deleted F_genes 
-    #          Deleted supE44 
-    #          Deleted thi | Interactions: thiamine
-    #          Deleted relA 
-    #          Deleted deoR 
-    #          Deleted nupG 
-    #          Deleted hsdR 
-    #   Plasmids/genes:
-    #      pAmpR
-    #        AmpR | Interactions: Amp
-
+vessel = plasma.prepare_vessel_from_well(plate.well_at_index(1), mapping=mapping)
+# AmpR is not of class Molecule, Plasmid or Bacterium.
+vessel.transform()
+vessel.print_transformation_results()
+# Temperature: 37
+# Molecules: Amp
+# 
+# DH5alpha derivatives:
+# DH5alpha_variant_0
+# Genome: DH5alpha_chr
+#          gyrA96 | Interactions: nalidixicacid
+#          endA1 
+#          recA1 
+#          purB20 
+#          Deleted F_genes 
+#          Deleted supE44 
+#          Deleted thi | Interactions: thiamine
+#          Deleted relA 
+#          Deleted deoR 
+#          Deleted nupG 
+#          Deleted hsdR 
+#   Plasmids: -
+# 
+# DH5alpha_variant_1
+# Genome: DH5alpha_chr
+#          gyrA96 | Interactions: nalidixicacid
+#          endA1 
+#          recA1 
+#          purB20 
+#          Deleted F_genes 
+#          Deleted supE44 
+#          Deleted thi | Interactions: thiamine
+#          Deleted relA 
+#          Deleted deoR 
+#          Deleted nupG 
+#          Deleted hsdR 
+#   Plasmids/genes:
+#      pAmpR
+#        AmpR | Interactions: Amp
+```
 
 ## Planned features
 

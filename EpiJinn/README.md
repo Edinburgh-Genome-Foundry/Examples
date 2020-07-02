@@ -18,25 +18,28 @@ For information on the effect of DNA methylation on each enzyme, see the [Restri
 
 ## Usage
 
-    import epijinn
-    methylator = epijinn.Methylator(str(sequence), epijinn.methylases, site_BsaI)
-    methyl.find_methylation_sites_in_pattern()
-
+```python
+import epijinn
+methylator = epijinn.Methylator(str(sequence), epijinn.methylases, site_BsaI)
+methyl.find_methylation_sites_in_pattern()
+```
 
 ## Example
 
-    import epijinn
-    import Bio
+```python
+import epijinn
+import Bio
 
-    sequence = 'ATGTCCCCATGCCTAC' + 'AGCAAGGC' + 'CGTCTC' + 'A' + 'GGCCCCCCCCCCCCA'  # seq + EcoBI (+ BsmBI +) EcoBI + seq
+sequence = 'ATGTCCCCATGCCTAC' + 'AGCAAGGC' + 'CGTCTC' + 'A' + 'GGCCCCCCCCCCCCA'  # seq + EcoBI (+ BsmBI +) EcoBI + seq
 
-    rest_dict = Bio.Restriction.Restriction_Dictionary.rest_dict
-    site_BsmBI = rest_dict['BsmBI']['site']
+rest_dict = Bio.Restriction.Restriction_Dictionary.rest_dict
+site_BsmBI = rest_dict['BsmBI']['site']
 
-    epijinn.EcoBI.sequence
-    # 'TGANNNNNNNNTGCT'
-    methylator = epijinn.Methylator(sequence, epijinn.methylases, site_BsmBI)
-    methylator.find_methylation_sites_in_pattern()
+epijinn.EcoBI.sequence
+# 'TGANNNNNNNNTGCT'
+methylator = epijinn.Methylator(sequence, epijinn.methylases, site_BsmBI)
+methylator.find_methylation_sites_in_pattern()
+```
 
 Result:
 
@@ -74,8 +77,10 @@ Result:
 
 The same approach can be used for finding enzyme site overlaps with other epigenetic modifications. For example, in DNA phosphorothioation, an oxygen on the DNA backbone is replaced with sulfur.
 
+```python
     thio = epijinn.Methylator(sequence, epijinn.dnd, site_BsmBI)
     thio.find_methylation_sites_in_pattern()
+```
 
 This returns an overlap with a putative *dnd* target site of *Streptomyces lividans 1326* with conserved sequence GGCC:
 

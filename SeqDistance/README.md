@@ -40,40 +40,42 @@ The module contains a function to generate a substitution matrix for any scoring
 
 ## Usage
 
-    import seqdistance
-    from weighted_levenshtein import lev
+```python
+import seqdistance
+from weighted_levenshtein import lev
 
-    # NUCLEOTIDES
-    seq = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
-    ref = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
+# NUCLEOTIDES
+seq = 'ATGGATCGGCGGGCG' + 'AG' + 'SCtg' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'
+ref = 'ATGGATCGGCGGGCG' + 'TT' + 'CSTS' + 'ATAAGGTGCTAGCTAAAAAAAAAAAA'  # diff 2
 
-    # (1) Extended letters encode match:
-    lev(seq, ref, substitute_costs=seqdistance.nt_substitute_costs)
-    # returns 2.0
-
-
-    # (2) Extended letters encode uncertainty. By default, lev() ignores self-substitute costs, therefore as a workaround, we map letters to another set of letters and update the substitute cost table:
-    translation_table = seqdistance.make_translation_table(seq, ref)
-    updated_substitute_costs = seqdistance.update_substitute_costs(seqdistance.uncertainty_substitute_costs, translation_table) 
-    lev(seq.translate(translation_table), ref, substitute_costs=updated_substitute_costs)
-    # returns 3.5
-    # ..AGSCtg..
-    #     ??|?
-    # ..TTCSTS..
+# (1) Extended letters encode match:
+lev(seq, ref, substitute_costs=seqdistance.nt_substitute_costs)
+# returns 2.0
 
 
-    # AMINO ACIDS
-    aa1 = 'HGE'  # tripeptide
-    aa2 = 'HGD'
+# (2) Extended letters encode uncertainty. By default, lev() ignores self-substitute costs, therefore as a workaround, we map letters to another set of letters and update the substitute cost table:
+translation_table = seqdistance.make_translation_table(seq, ref)
+updated_substitute_costs = seqdistance.update_substitute_costs(seqdistance.uncertainty_substitute_costs, translation_table) 
+lev(seq.translate(translation_table), ref, substitute_costs=updated_substitute_costs)
+# returns 3.5
+# ..AGSCtg..
+#     ??|?
+# ..TTCSTS..
 
-    lev(aa1, aa2, substitute_costs=seqdistance.aa_substitute_costs)
-    # returns 0.0
+
+# AMINO ACIDS
+aa1 = 'HGE'  # tripeptide
+aa2 = 'HGD'
+
+lev(aa1, aa2, substitute_costs=seqdistance.aa_substitute_costs)
+# returns 0.0
 
 
-    # The module has an implementation of the Hamming distance too:
-    seqdistance.hamming(seq, ref, substitute_costs=seqdistance.nt_substitute_costs, verbose=True)
-    # returns 2.0
-    # prints:
-    # ATGGATCGGCGGGCGAGSCtgATAAGGTGCTAGCTAAAAAAAAAAAA
-    # |||||||||||||||  ||||||||||||||||||||||||||||||
-    # ATGGATCGGCGGGCGTTCSTSATAAGGTGCTAGCTAAAAAAAAAAAA
+# The module has an implementation of the Hamming distance too:
+seqdistance.hamming(seq, ref, substitute_costs=seqdistance.nt_substitute_costs, verbose=True)
+# returns 2.0
+# prints:
+# ATGGATCGGCGGGCGAGSCtgATAAGGTGCTAGCTAAAAAAAAAAAA
+# |||||||||||||||  ||||||||||||||||||||||||||||||
+# ATGGATCGGCGGGCGTTCSTSATAAGGTGCTAGCTAAAAAAAAAAAA
+```
