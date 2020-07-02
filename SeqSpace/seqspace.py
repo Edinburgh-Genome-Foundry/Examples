@@ -64,6 +64,18 @@ def read_seqspace(path, separator=",", choice_separator="|"):
 
     space = dnachisel.MutationSpace.MutationSpace(mutation_choices)
 
-    seq_space = SeqSpace(space, name, separator=",", choice_separator="|")
+    seq_space = SeqSpace(
+        space, name, separator=separator, choice_separator=choice_separator
+    )
 
     return seq_space
+
+
+def make_aa_to_codon_backtable(codontable):
+    aa_list = list(set(codontable.values()))
+    backtable = {key: [] for key in aa_list}
+    for codon, aa in codontable.items():
+        backtable[aa] = backtable[aa] + [codon]
+
+    return backtable
+
