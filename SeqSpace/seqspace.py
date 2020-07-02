@@ -79,3 +79,23 @@ def make_aa_to_codon_backtable(codontable):
 
     return backtable
 
+
+def convert_aa_to_seqspace(aa, backtable, name=None):
+    if name is None:
+        name = aa
+
+    mutation_choices = []
+    codon_length = len(backtable[aa[0]][0])  # 3 nt / codon
+
+    for i, aminoacid in enumerate(aa):
+        seqs = backtable[aminoacid]
+        loc = (i * codon_length, i * codon_length + codon_length)
+        choice = dnachisel.MutationSpace.MutationChoice(loc, seqs)
+
+        mutation_choices += [choice] * codon_length
+
+    space = dnachisel.MutationSpace.MutationSpace(mutation_choices)
+
+    seq_space = seqspace.SeqSpace(space, name)
+    return seq_space
+
