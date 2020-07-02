@@ -2,11 +2,11 @@ import dnachisel
 
 
 class SeqSpace:
-    def __init__(self, space, name, separator=",", choice_separator="|"):
+    def __init__(self, space, name, separator=",", segment_separator="|"):
         self.space = space
         self.name = name
         self.separator = separator
-        self.choice_separator = choice_separator
+        self.segment_separator = segment_separator
 
     def get_string(self):
         choice_list = self.space.choices_list
@@ -14,7 +14,7 @@ class SeqSpace:
         sequence = ""
         for choice in choice_list:
             seqs = self.separator.join(choice.variants)
-            seqs += self.choice_separator
+            seqs += self.segment_separator
             sequence += seqs
         return sequence
 
@@ -32,7 +32,7 @@ class SeqSpace:
         f.close()
 
 
-def read_seqspace(path, separator=",", choice_separator="|"):
+def read_seqspace(path, separator=",", segment_separator="|"):
     f = open(path, "r", encoding="utf8")
     lines = f.read().splitlines()
     f.close()
@@ -41,12 +41,12 @@ def read_seqspace(path, separator=",", choice_separator="|"):
         raise ValueError("Invalid sequence format")
     name = lines[0][1:]  # remove '>'
 
-    if lines[1][-1] != choice_separator:
+    if lines[1][-1] != segment_separator:
         raise ValueError(
-            "Invalid sequence format: sequence must end in " + choice_separator
+            "Invalid sequence format: sequence must end in " + segment_separator
         )
-    sequence_list = lines[1].split(choice_separator)
-    sequence_list.pop()  # the empty string after last choice_separator
+    sequence_list = lines[1].split(segment_separator)
+    sequence_list.pop()  # the empty string after last segment_separator
 
     sequence_counter = 0
     mutation_choices = []
@@ -65,7 +65,7 @@ def read_seqspace(path, separator=",", choice_separator="|"):
     space = dnachisel.MutationSpace.MutationSpace(mutation_choices)
 
     seq_space = SeqSpace(
-        space, name, separator=separator, choice_separator=choice_separator
+        space, name, separator=separator, segment_separator=segment_separator
     )
 
     return seq_space
@@ -96,6 +96,6 @@ def convert_aa_to_seqspace(aa, backtable, name=None):
 
     space = dnachisel.MutationSpace.MutationSpace(mutation_choices)
 
-    seq_space = seqspace.SeqSpace(space, name)
+    seq_space = SeqSpace(space, name)
     return seq_space
 
