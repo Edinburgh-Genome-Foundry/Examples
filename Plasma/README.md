@@ -6,7 +6,7 @@ The most important steps for adapting a vector (backbone) are ensuring that ther
 * two sites for a restriction enzyme, flanking the insert segment
 * no other sites for the restriction enzyme
 
-Additionally, we can add selection for (i) proper assembly (for example, by including ccdB at the insertion location) and for (ii) presence of plasmid in the bacterium (for example, by using antibiotic resistance).
+Additionally, we can add selection for (i) proper assembly (for example, by including ccdB at the insertion location) and for (ii) presence of plasmid in the bacterium (for example, by using antibiotic resistance). Finally, check that the replicon and the partitioning system in the plasmid suits the strain, compatibility and other requirements.
 
 
 This section also contains a **Plasm**id **a**ssistant Python module that helps in looking up plasmid or bacterium strain properties. It can also *simulate a transformation outcome* by generating plasmid/bacterium combinations, then lists the interactions between genes and molecules in the system. Simulating the *incubation* outcome (survives/grows/perishes) would require modelling the many cases of gene interactions therefore it is not implemented. In the current version, all entities (gene, molecule, plasmid, bacterium) must have a different name.
