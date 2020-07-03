@@ -2,6 +2,24 @@ import dnachisel
 
 
 class SeqSpace:
+    """SeqSpace class
+    
+    Parameters
+    ----------
+
+    space
+      DNA Chisel MutationSpace instance of the sequence.
+
+    name
+      str name of the sequence
+
+    separator
+      separator between segment choices (default `,`)
+      
+    segment_separator
+      separator between segments (default `|`)
+    """
+
     def __init__(self, space, name, separator=",", segment_separator="|"):
         self.space = space
         self.name = name
@@ -33,6 +51,21 @@ class SeqSpace:
 
 
 def read_seqspace(path, separator=",", segment_separator="|"):
+    """Read seqspace from file
+    
+    Parameters
+    ----------
+
+    path
+      str path to file written by `SeqSpace().write_file()`
+      
+    separator
+      separator between segment choices (default `,`)
+      
+    segment_separator
+      separator between segments (default `|`)
+    """
+
     f = open(path, "r", encoding="utf8")
     lines = f.read().splitlines()
     f.close()
@@ -72,6 +105,17 @@ def read_seqspace(path, separator=",", segment_separator="|"):
 
 
 def make_aa_to_codon_backtable(codontable):
+    """Convert a codontable for use with convert_aa_to_seqspace()
+
+    Returns a codontable (dict) in the format `{'F': ['TTT', 'TTC'], 'L': ['TTA', ...`
+    
+    Parameters
+    ----------
+
+    codontable
+      dict of codons in the format `{'TTT': 'F', 'TTC': 'F', 'TTA': 'L', ...`
+    """
+
     aa_list = list(set(codontable.values()))
     backtable = {key: [] for key in aa_list}
     for codon, aa in codontable.items():
@@ -81,6 +125,21 @@ def make_aa_to_codon_backtable(codontable):
 
 
 def convert_aa_to_seqspace(aa, backtable, name=None):
+    """Create a SeqSpace instance from an amino acid sequence
+    
+    Parameters
+    ----------
+    
+    aa
+      str amino acid sequence
+
+    backtable
+      dict of amino acids in the format `{'F': ['TTT', 'TTC'], 'L': ['TTA', ...`
+
+    name
+      str name attribute of the returned SeqSpace instance (default: amino acid str)
+    """
+
     if name is None:
         name = aa
 

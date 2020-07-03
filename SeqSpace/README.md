@@ -1,14 +1,14 @@
 # SeqSpace
 
-SeqSpace uses [DNA Chisel](https://github.com/Edinburgh-Genome-Foundry/DnaChisel)'s MutationSpace class to read & write ambiguous nucleotide sequences. In most cases, extended IUPAC letters can be used for ambiguous sequences, but not always. For example, the amino acid cysteine (Cys), can be encoded by `TGT`, `TGC` or by `TGY`, using extended letters (Y = T or C); however, an ambiguous nucleotide sequence of serine (Ser, encoded by TCT, TCC, TCA, TCG, AGT, AGC; TCN, AGY) cannot be written using one letter for each position, because the possible values for the second and third letters depend on the first letter.
+SeqSpace uses [DNA Chisel](https://github.com/Edinburgh-Genome-Foundry/DnaChisel)'s MutationSpace class to read & write ambiguous nucleotide sequences. In most cases, extended IUPAC letters can be used for ambiguous sequences, but not always. For example, the amino acid cysteine (Cys) can be encoded by `TGY`, using extended letters (Y = T or C); however, an ambiguous nucleotide sequence of serine (Ser, encoded by `TCN` or `AGY`) cannot be written using one letter for each position, because the possible values for the second and third letters depend on the first letter.
 
-The possible sequence variants are represented using segments, each with a set of sequence choices:
+In a MutationSpace/SeqSpace instance, the possible sequence variants are represented using segments, each with a set of sequence choices:
 
     AT|TTC|T
     TG|TAA|A 
       |GGG| 
 
-This example represents 2 * 3 * 2 = 12 sequence variants.
+This example represents 2 * 3 * 2 = 12 sequence variants, each 6 nt long.
 
 
 ## Usage
@@ -73,5 +73,5 @@ The first line of the seqspace fileformat starts with '>', followed by the seque
     >test_seq
     AT,TG|TTC,TAA,GGG|T|
 
-The second line contains the sequence. The subsegments are separated by a separator character (`|` by default), and the sequence choices are separated by another character (`,`). The sequence ends with the separator character.
+The second line contains the sequence. The segments are marked by a separator character (`|` by default), and the sequence choices are separated by another character (`,`). The sequence ends with the separator character.
 
