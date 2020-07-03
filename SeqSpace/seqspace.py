@@ -105,7 +105,7 @@ def read_seqspace(path, separator=",", segment_separator="|"):
 
 
 def make_aa_to_codon_backtable(codontable):
-    """Convert a codontable for use with convert_aa_to_seqspace()
+    """Convert a codontable for use with convert_seq_to_seqspace()
 
     Returns a codontable (dict) in the format `{'F': ['TTT', 'TTC'], 'L': ['TTA', ...`
     
@@ -124,29 +124,29 @@ def make_aa_to_codon_backtable(codontable):
     return backtable
 
 
-def convert_aa_to_seqspace(aa, backtable, name=None):
+def convert_seq_to_seqspace(seq, backtable, name=None):
     """Create a SeqSpace instance from an amino acid sequence
     
     Parameters
     ----------
     
-    aa
-      str amino acid sequence
+    seq
+      str of letters
 
     backtable
-      dict of amino acids in the format `{'F': ['TTT', 'TTC'], 'L': ['TTA', ...`
+      dict of letter: nt in the format `{'F': ['TTT', 'TTC'], 'L': ['TTA', ...`
 
     name
-      str name attribute of the returned SeqSpace instance (default: amino acid str)
+      str name attribute of the returned SeqSpace instance (default: seq str)
     """
 
     if name is None:
-        name = aa
+        name = seq
 
     mutation_choices = []
-    codon_length = len(backtable[aa[0]][0])  # 3 nt / codon
+    codon_length = len(backtable[seq[0]][0])  # 3 nt / codon
 
-    for i, aminoacid in enumerate(aa):
+    for i, aminoacid in enumerate(seq):
         seqs = backtable[aminoacid]
         loc = (i * codon_length, i * codon_length + codon_length)
         choice = dnachisel.MutationSpace.MutationChoice(loc, seqs)
@@ -157,4 +157,25 @@ def convert_aa_to_seqspace(aa, backtable, name=None):
 
     seq_space = SeqSpace(space, name)
     return seq_space
+
+
+"""Extended nucleotide letter to nucleotide letter dictionary"""
+ambiguity_code_to_nt = {
+    "A": ["A"],
+    "G": ["G"],
+    "C": ["C"],
+    "T": ["T"],
+    "Y": ["C", "T"],
+    "R": ["A", "G"],
+    "W": ["A", "T"],
+    "S": ["G", "C"],
+    "K": ["T", "G"],
+    "M": ["C", "A"],
+    "D": ["A", "G", "T"],
+    "V": ["A", "C", "G"],
+    "H": ["A", "C", "T"],
+    "B": ["C", "G", "T"],
+    "X": ["A", "C", "G", "T"],
+    "N": ["A", "C", "G", "T"],
+}
 

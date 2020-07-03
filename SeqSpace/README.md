@@ -42,6 +42,24 @@ print(seq_space.make_filetext())
 new_seqspace = seqspace.read_seqspace('example.seqspace')
 ```
 
+## IUPAC ambiguity characters
+
+We can convert a IUPAC ambiguous sequence into a mutation space, using a codontable:
+
+```python
+# Make a sequence:
+iupac = ''.join(list(seqspace.ambiguity_code_to_nt.keys()))
+print(iupac)
+# AGCTYRWSKMDVHBXN
+seq_space = seqspace.convert_seq_to_seqspace(iupac, seqspace.ambiguity_code_to_nt)
+print(seq_space.make_filetext())
+# >AGCTYRWSKMDVHBXN
+# A|G|C|T|C,T|A,G|A,T|G,C|T,G|C,A|A,G,T|A,C,G|A,C,T|C,G,T|A,C,G,T|A,C,G,T|
+```
+
+
+## Amino acid sequence
+
 We can convert an amino acid (aa) sequence into a mutation space, using a codontable:
 
 ```python
@@ -59,7 +77,7 @@ print(aa)
 
 backtable = seqspace.make_aa_to_codon_backtable(codontable)
 
-seq_space = seqspace.convert_aa_to_seqspace(aa, backtable, name="Amino_acid_seq")
+seq_space = seqspace.convert_seq_to_seqspace(aa, backtable, name="Amino_acid_seq")
 print(seq_space.get_string())
 # AAA,AAG|AAT,AAC|ACT,ACC,ACA,ACG|CGT,CGC,CGA,CGG,AGA,AGG|TCT,TCC,TCA,TCG,AGT,AGC|ATT,ATC,ATA|ATG|CAA,CAG|CAT,CAC|CCT,CCC,CCA,CCG|TTA,TTG,CTT,CTC,CTA,CTG|GAA,GAG|GAT,GAC|GCT,GCC,GCA,GCG|GGT,GGC,GGA,GGG|GTT,GTC,GTA,GTG|TAT,TAC|TGT,TGC|TGG|TTT,TTC|TAA,TAG,TGA|
 print(seq_space.name)
