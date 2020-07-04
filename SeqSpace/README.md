@@ -8,7 +8,7 @@ In a MutationSpace/SeqSpace instance, the possible sequence variants are represe
     TG|TAA|A 
       |GGG| 
 
-This example represents 2 * 3 * 2 = 12 sequence variants, each 6 nt long.
+This example represents 2 * 3 * 2 = 12 sequence variants, each 6 nt long. A segment signifies what nucleotides must occur together, therefore the mutationspace `AT|TTC|T|` is *not* equivalent to `ATTTCT|`.
 
 
 ## Usage
@@ -44,7 +44,7 @@ new_seqspace = seqspace.read_seqspace('example.seqspace')
 
 ## IUPAC ambiguity characters
 
-We can convert a IUPAC ambiguous sequence into a mutation space, using a codontable:
+We can convert a IUPAC ambiguous sequence into a mutation space, using a conversion table:
 
 ```python
 # Make a sequence:
