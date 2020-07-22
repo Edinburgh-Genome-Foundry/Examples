@@ -394,6 +394,43 @@ rpsL_strR = Gene(
     interactions=["streptomycin"],
     description="Streptomycin resistance. Mutation in ribosomal protein S12.",
 )
+malB_K_12_lamdaS = Gene(
+    name="malB_K_12_lamdaS",
+    interactions=["maltose"],
+    description="The malB region was transduced in from the K-12 strain W3110. Mal+λS. Mutation in phage lambda receptor protein (maltose channel outer membrane protein, maltoporin).",
+)
+lon_11 = Gene(
+    name="lon_11", description="Mutation in lon (ATP-dependent protease LA).",
+)
+lambda_DE3 = Gene(
+    name="lambda_DE3",
+    interactions=[""],
+    description="DE3, a λ prophage carrying the T7 RNA polymerase gene under the control of the lacUV5 promoter. λDE3 [lacI lacUV5-T7p07 ind1 sam7 nin5]).",
+)
+hsdS10 = Gene(
+    name="hsdS10",
+    description="Mutation in hsdS. EcoKI restriction-modification system. Specificity determinant for HsdM and HsdR.",
+)
+dcm = Gene(name="dcm", description="DNA cytosine methylase",)
+galM = Gene(
+    name="galM",
+    interactions=["galactose", "two_deoxygalactose"],
+    description="UDPgalactose 4-epimerase",
+)
+galK = Gene(
+    name="galK",
+    interactions=["galactose", "two_deoxygalactose"],
+    description="Galactokinase",
+)
+galT = Gene(
+    name="galT",
+    interactions=["galactose", "two_deoxygalactose"],
+    description="Galactose-1-phosphate uridylyltransferase",
+)
+ompT = Gene(
+    name="ompT",
+    description="outer membrane protein protease VII. Mutation/deletion reduces proteolysis of expressed proteins.",
+)
 
 
 # MOLECULES
@@ -409,6 +446,7 @@ arabinose = Molecule(name="arabinose")
 streptomycin = Molecule(name="streptomycin")
 galactose = Molecule(name="galactose")
 two_deoxygalactose = Molecule(name="two_deoxygalactose")
+maltose = Molecule(name="maltose")
 
 
 # DNA
@@ -424,11 +462,21 @@ TOP10_chr = Chr(
     genes=[araD139, galE15, galK16, rpsL_strR, recA1, endA1],
     deleted=[F_genes, mcrA, mrr, hsdRMS, mcrBC, lacZ, lacX74, nupG, leu],
 )
+BL21_DE3_chr = Chr(
+    name="BL21_DE3_chr",
+    genes=[lon_11, hsdS10, lambda_DE3, malB_K_12_lamdaS],
+    deleted=[F_genes, ompT, galM, galK, galT, galE, dcm],
+)
 
 
 # BACTERIA
 TOP10 = Bacterium(name="TOP10", chr=TOP10_chr)
 DH5alpha = Bacterium(name="DH5alpha", chr=DH5alpha_chr)
+BL21_DE3 = Bacterium(
+    name="BL21_DE3",
+    chr=BL21_DE3_chr,
+    description="E. coli B strain variant. Cured of defective P2-like prophage found in wildtype E.coli B.",
+)
 
 
 # STORE
@@ -465,6 +513,15 @@ genes = {
     "leu": leu,
     "rpsL": rpsL,
     "rpsL_strR": rpsL_strR,
+    "lon_11": lon_11,
+    "hsdS10": hsdS10,
+    "malB_K_12_lamdaS": malB_K_12_lamdaS,
+    "lambda_DE3": lambda_DE3,
+    "ompT": ompT,
+    "galM": galM,
+    "galK": galK,
+    "galT": galT,
+    "dcm": dcm,
 }
 molecules = {
     "Amp": Amp,
@@ -479,8 +536,15 @@ molecules = {
     "streptomycin": streptomycin,
     "galactose": galactose,
     "two_deoxygalactose": two_deoxygalactose,
+    "maltose": maltose,
 }
-dna = {"pAmpR": pAmpR, "F": F, "DH5alpha_chr": DH5alpha_chr, "TOP10_chr": TOP10_chr}
-strains = {"TOP10": TOP10, "DH5alpha": DH5alpha}
+dna = {
+    "pAmpR": pAmpR,
+    "F": F,
+    "DH5alpha_chr": DH5alpha_chr,
+    "TOP10_chr": TOP10_chr,
+    "BL21_DE3_chr": BL21_DE3_chr,
+}
+strains = {"TOP10": TOP10, "DH5alpha": DH5alpha, "BL21_DE3": BL21_DE3}
 
 STORE = {**genes, **molecules, **dna, **strains}
