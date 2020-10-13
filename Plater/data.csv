@@ -1,0 +1,12 @@
+source_well,source_well_content,source_well_concentration,source_well_volume,source_plate_name,source_plate_type,source_plate_size,volume_to_transfer,destination_plate_name,destination_plate_type,destination_plate_size
+A1,HC_Amp_ccdB,50,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+B1,conn_D-G,56,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+C1,conn_J-K,42,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+D1,p15_part,56,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+E1,p15_part_2,65,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+F1,pAD_promoter,25,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+G1,pDG_CDS,52,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+H1,p10_terminator,62,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+A2,buffer,70,,Source1,4ti-0960/B on CPAC,96,50,Destination,Echo PP P-05525 raised,384
+A1,part_from_source2,40,,Source2,4ti-0960/B on carrier,384,40,Destination,Echo PP P-05525 raised,384
+B1,conn_from_source2,40,,Source2,4ti-0960/B on carrier,384,40,Destination,Echo PP P-05525 raised,384

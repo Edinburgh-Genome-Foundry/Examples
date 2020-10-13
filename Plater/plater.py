@@ -7,7 +7,7 @@ import dioscuri
 def create_gwl_and_platemap_from_csv(
     name, csv_file, starting_well=1, washing_scheme=None
 ):
-    """Generate a dioscuri.GeminiWorkList() from a csv file.
+    """Generate a `dict` of a dioscuri.GeminiWorkList() and a Platefrom a csv file.
 
     **Parameters**
 
@@ -18,26 +18,39 @@ def create_gwl_and_platemap_from_csv(
     > The csv file containing the transfers. There must be only one destination plate
     > specified. The required csv columns are:
         source_well
-        source_well_content
-        source_well_concentration
-        source_well_volume
+        source_well_content  # optional: no plate map generated if any missing.
+        source_well_concentration  # nanogram/microliter (ng/uL). Optional.
+        source_well_volume  # optional
         source_plate_name
         source_plate_type
-        source_plate_size
-        volume_to_transfer
-        destination_plate_name
-        destination_plate_type
-        destination_plate_size
+        source_plate_size  # only `96` or `384`
+        volume_to_transfer  # microliter (uL)
+        destination_plate_name  # only one destination plate
+        destination_plate_type  # only one destination plate
+        destination_plate_size  # only one destination plate (only `96` or `384`)
 
     **starting_well**
-    > The index of the starting well. Wells up to that well will be skipped. Default 1.
+    > The index of the starting well: skip wells before starting well. Default `1`.
 
     **washing_scheme**
-    > The washing_scheme to use between the transfers. Default parameter uses "W".
+    > The washing_scheme (1-4) to use between the transfers. Default uses "W;".
     """
-    df = read_transfer_table(csv_file)
+    report = ""  # this collects various results during run
+
+    df = pandas.read_csv(csv_file)  # read_transfer_table
+
+    # Input checks:
     if not len(set(df.destination_plate_name)) == 1:
         raise ValueError("There must be only one destination plate specified")
+    if not len(set(df.destination_plate_size)) == 1:
+        raise ValueError("There must be only one destination plate size specified")
+    if not len(set(df.destination_plate_type)) == 1:
+        raise ValueError("There must be only one destination plate type specified")
+
+    if df.destination_plate_size[0] not in [96, 384]:
+        raise ValueError("Only 96-well and 384-well destination plates are supported.")
+    if set(df.source_plate_size) - set([96, 384]) != set():
+        raise ValueError("Only 96-well and 384-well source plates are supported.")
 
     gwl = create_worklist_data_object(name, df, starting_well, washing_scheme)
 
@@ -52,18 +65,20 @@ def create_gwl_and_platemap_from_csv(
     ]
     df["destination_well"] = wellnames
 
+    report += "The starting destination well position is %d (%s).\n" % (
+        starting_well,
+        df["destination_well"][0],
+    )
+    report += "%d transfers listed in gwl.\n" % (len(df["destination_well"]))
+
     try:
         plate = create_destination_plate(name, df, starting_well)
     except ValueError:
-        print("Cannot create destination plate: missing content")
+        print("Cannot create destination plate: missing content or concentration")
+        plate = None
+        report += "\nNot created destination plate: missing content or concentration.\n"
 
-    return {"gwl": gwl, "plate": plate}
-
-
-def read_transfer_table(filename):
-    list_of_transfers_in_table = pandas.read_csv(filename)
-
-    return list_of_transfers_in_table
+    return {"gwl": gwl, "plate": plate, "report": report}
 
 
 def create_gwl_record_triplet(entry, current_destination_well, washing_scheme):
@@ -122,7 +137,7 @@ def create_destination_plate(name, df, starting_well):
         plate = Plate96(name=name)
     elif df.destination_plate_size[0] == 384:
         plate = Plate384(name=name)
-    else:
+    else:  # should never occur as it is also tested in the calling function.
         raise ValueError("Only 96-well and 384-well destination plates are supported.")
 
     for i, row in df.iterrows():
@@ -135,20 +150,6 @@ def create_destination_plate(name, df, starting_well):
         well.add_content({part_label: quantity}, volume=volume_in_l)
 
     return plate
-    # """CREATE DF"""
-    # number_of_transfers = len(df.well)
-    # dict_of_series = {
-    #     "source_well": df.well,
-    #     "name": df.name,
-    #     "concentration": df.concentration,
-    #     "source_plate_name": pandas.Series([source_plate_name] * number_of_transfers),
-    #     "source_plate_type": pandas.Series([source_plate_type] * number_of_transfers),
-    #     "source_plate_tecan_well": pandas.Series(source_plate_tecan_well_list),
-    #     "destination_plate_name": pandas.Series([destination_plate_name] * number_of_transfers),
-    #     "destination_plate_type": pandas.Series([destination_plate_type] * number_of_transfers),
-    #     "destination_well": pandas.Series(destination_well_list),
-    # }
-    # output_df = pandas.DataFrame(dict_of_series)
 
 
 def create_worklist_data_object(
@@ -168,72 +169,6 @@ def create_worklist_data_object(
 
     worklist = dioscuri.GeminiWorkList(name=name, records=records)
 
-    # name_well_dict = dict(zip(df.name, df.well))
-
-    # # source_plate_name_list = []
-    # # source_plate_type_list = []
-    # source_plate_tecan_well_list = []
-    # # destination_plate_name_list = []
-    # # destination_plate_type_list = []
-    # destination_well_list = []
-
-    # for name, well in name_well_dict.items():
-
-    # """GENERATE GWL"""
-
-    # tecan_well = convert_plate96_to_tecan_well(well)
-    # #         print(tecan_well)
-    # aspirate = dioscuri.Pipette(
-    #     "A",
-    #     rack_label=source_plate_name,
-    #     rack_type=source_plate_type,
-    #     position=tecan_well,
-    #     volume=volume,
-    # )
-    # records.append(aspirate)
-
-    # dispense = dioscuri.Pipette(
-    #     "D",
-    #     rack_label=destination_plate_name,
-    #     rack_type=destination_plate_type,
-    #     position=current_destination_well,
-    #     volume=volume,
-    # )
-    # records.append(dispense)
-
-    # records.append(wash)
-
-    # worklist = dioscuri.GeminiWorkList(name=name, records=records)
-
-    # """Store to make pandas Series"""
-    # #         source_plate_name_list.append(source_plate_name)
-    # #         source_plate_type_list.append(source_plate_type)
-    # source_plate_tecan_well_list.append(tecan_well)
-    # #         destination_plate_name_list.append(destination_plate_name)
-    # #         destination_plate_type_list.append(destination_plate_type)
-    # destination_well_list.append(current_destination_well)
-
-    # """CREATE DF"""
-    # number_of_transfers = len(df.well)
-    # dict_of_series = {
-    #     "source_well": df.well,
-    #     "name": df.name,
-    #     "concentration": df.concentration,
-    #     "source_plate_name": pandas.Series([source_plate_name] * number_of_transfers),
-    #     "source_plate_type": pandas.Series([source_plate_type] * number_of_transfers),
-    #     "source_plate_tecan_well": pandas.Series(source_plate_tecan_well_list),
-    #     "destination_plate_name": pandas.Series(
-    #         [destination_plate_name] * number_of_transfers
-    #     ),
-    #     "destination_plate_type": pandas.Series(
-    #         [destination_plate_type] * number_of_transfers
-    #     ),
-    #     "destination_well": pandas.Series(destination_well_list),
-    # }
-    # output_df = pandas.DataFrame(dict_of_series)
-
-    # return {"worklist": worklist, "output_df": output_df}
-
     return worklist
 
 
@@ -242,9 +177,9 @@ def convert_geneart_shipment_file_to_csv(
     destination_plate_name,
     destination_plate_type,
     destination_plate_size,
-    volume_to_transfer=50,
+    destination_csv=None,
 ):
-    """Create a csv file from a shipment layout sheet.
+    """Create a csv file from a shipment layout sheet and return the corresponding df.
 
     The csv file can be used with the function `create_gwl_and_platemap_from_csv().`
     Only 96-well source plates are supported.
@@ -265,13 +200,15 @@ def convert_geneart_shipment_file_to_csv(
     plates_data["source_well_concentration"] *= 1000
 
     plates_data["source_plate_size"] = source_plate_size
-    plates_data["volume_to_transfer"] = volume_to_transfer
+    plates_data["volume_to_transfer"] = "ENTER VOLUME TO TRANSFER (uL)"
     plates_data["source_plate_type"] = "ENTER SOURCE PLATE TYPE"
     plates_data["destination_plate_name"] = destination_plate_name
     plates_data["destination_plate_type"] = destination_plate_type
     plates_data["destination_plate_size"] = destination_plate_size
-    csv_filepath = filepath + ".csv"
-    plates_data.to_csv(csv_filepath, index=False)
+    if destination_csv is not None:
+        plates_data.to_csv(destination_csv, index=False)
+
+    return plates_data
 
 
 def plates_from_geneart_shipment_layout_sheet(filepath):
@@ -307,4 +244,5 @@ def plates_from_geneart_shipment_layout_sheet(filepath):
             quantity = volume_microl * row["Concentration [µg/µl]"] * 1e-6
             part_label = row.Gene_Name
             well.add_content({part_label: quantity}, volume=volume_in_l)
+
     return [plate for i, plate in sorted(plates.items())]
