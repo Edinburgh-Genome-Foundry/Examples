@@ -52,11 +52,18 @@ def create_gwl_and_platemap_from_csv(
     if set(df.source_plate_size) - set([96, 384]) != set():
         raise ValueError("Only 96-well and 384-well source plates are supported.")
 
+    if (starting_well + len(df.destination_plate_type)) > int(
+        df.destination_plate_size[0] + 1
+    ):  # add 1 because starting_well is not zero-based
+        raise ValueError("Cannot do transfer: starting well value is too big")
+
+    # dioscuri.GeminiWorkList:
     gwl = create_worklist_data_object(name, df, starting_well, washing_scheme)
 
     destination_well_list = list(
-        range(starting_well, len(df.destination_plate_type) + 1)
+        range(starting_well, (starting_well + len(df.destination_plate_type)))
     )
+    print(destination_well_list)
     wellnames = [
         plateo.tools.index_to_wellname(
             index=index, num_wells=df.destination_plate_size[0], direction="column"

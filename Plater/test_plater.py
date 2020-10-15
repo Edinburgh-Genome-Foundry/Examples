@@ -1,9 +1,16 @@
+import pytest
+
 import plateo
 import plater
 
 
 def test_create_gwl_and_platemap_from_csv(tmpdir):
     filename = "data.csv"
+
+    # Starting well set too high:
+    with pytest.raises(ValueError):
+        plater.create_gwl_and_platemap_from_csv("test", filename, starting_well=383)
+
     gwl_and_platemap = plater.create_gwl_and_platemap_from_csv("test", filename)
     assert (
         gwl_and_platemap["gwl"].records_to_string()
