@@ -155,6 +155,10 @@ def create_destination_plate(name, df, starting_well, destination_plate=None):
 
     for i, row in df.iterrows():
         well = plate.wells[row.destination_well]
+        if not well.is_empty:
+            raise ValueError(
+                "Error: destination plate well %s is not empty" % row.destination_well
+            )
         well.data = {"source_well_content": row.source_well_content}
         volume_microl = row["volume_to_transfer"]  # microliter (uL)
         volume_in_l = volume_microl * 1e-6
