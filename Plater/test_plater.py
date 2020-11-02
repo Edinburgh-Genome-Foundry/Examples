@@ -1,6 +1,7 @@
 import pytest
 
 import plateo
+from plateo.parsers import plate_from_content_spreadsheet
 import plater
 
 
@@ -31,6 +32,12 @@ def test_create_gwl_and_platemap_from_csv(tmpdir):
         .well_at_index(5, direction="column")
         .content.components_as_string()
         == "p15_part_2"
+    )
+
+    # Test with non-empty plate:
+    destination_plate = plate_from_content_spreadsheet("example_echo_plate.xlsx")
+    gwl_and_platemap = plater.create_gwl_and_platemap_from_csv(
+        "test", filename, destination_plate=destination_plate
     )
 
 
