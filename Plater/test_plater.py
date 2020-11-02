@@ -1,3 +1,4 @@
+import os
 import pytest
 
 import plateo
@@ -23,8 +24,9 @@ def test_create_gwl_and_platemap_from_csv(tmpdir):
         == "The starting destination well position is 1 (A1).\n11 transfers listed in gwl.\n"
     )
 
+    destination_path = os.path.join(str(tmpdir), "dest_plate_for_data_csv.xlsx")
     plateo.exporters.plate_to_content_spreadsheet(
-        gwl_and_platemap["plate"], "dest_plate_for_data_csv.xlsx"
+        gwl_and_platemap["plate"], destination_path
     )
 
     assert (
@@ -52,12 +54,13 @@ def test_plates_from_geneart_shipment_layout_sheet():
     ) == "p6_efgh"
 
 
-def test_convert_geneart_shipment_file_to_csv():
+def test_convert_geneart_shipment_file_to_csv(tmpdir):
+    destination_path = os.path.join(str(tmpdir), "geneart_example_transfer.csv")
     geneart_plate_csv = plater.convert_geneart_shipment_file_to_csv(
         "geneart_example.xlsx",
         destination_plate_name="Destination",
         destination_plate_type="Echo PP P-05525 raised",
         destination_plate_size=384,
-        destination_csv="geneart_example_transfer.csv",
+        destination_csv=destination_path,
     )
     geneart_plate_csv.source_well_content[11] == "p5_ABCDE"
