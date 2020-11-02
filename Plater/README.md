@@ -15,12 +15,20 @@ import plateo
 
 ---
 
-Generate gwl from csv specifications:
-
+Optional: load destination plate
 ```python
-gwl_and_platemap = plater.create_gwl_and_platemap_from_csv(name="test", csv_file="data.csv",
-                                                          starting_well=1,  # default
-                                                          washing_scheme=None)  # default
+destination_plate = plate_from_content_spreadsheet("example_echo_plate.xlsx")
+```
+
+Generate gwl from csv specifications:
+```python
+gwl_and_platemap = plater.create_gwl_and_platemap_from_csv(name="test",
+                                                           csv_file="data.csv",
+                                                           starting_well=1,  # default
+                                                           washing_scheme=None,  # default
+                                                           destination_plate=destination_plate)
+# The default destination_plate=None generates a plate according to the csv file.
+
 gwl_and_platemap.keys()
 # dict_keys(['gwl',     # dioscuri.GeminiWorkList()
 #            'plate',   # plateo.Plate()
