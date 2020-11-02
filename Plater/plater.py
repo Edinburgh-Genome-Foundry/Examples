@@ -80,10 +80,11 @@ def create_gwl_and_platemap_from_csv(
 
     try:
         plate = create_destination_plate(name, df, starting_well, destination_plate)
-    except ValueError:
-        print("Cannot create destination plate: missing content or concentration")
+    except Exception as e:
+        print("Cannot create destination plate!")
+        print(e)
         plate = None
-        report += "\nNot created destination plate: missing content or concentration.\n"
+        report += "\nDestination plate not created.\n"
 
     return {"gwl": gwl, "plate": plate, "report": report}
 
@@ -135,10 +136,10 @@ def create_gwl_record_triplet(entry, current_destination_well, washing_scheme):
 
 def create_destination_plate(name, df, starting_well, destination_plate=None):
     if any(pandas.isna(df.source_well_content)):
-        raise ValueError
+        raise ValueError("Error: missing content")
 
     if any(pandas.isna(df.source_well_concentration)):
-        raise ValueError
+        raise ValueError("Error: missing concentration")
 
     if destination_plate is None:
         if df.destination_plate_size[0] == 96:
