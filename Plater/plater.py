@@ -5,7 +5,7 @@ import dioscuri
 
 
 def create_gwl_and_platemap_from_csv(
-    name, csv_file, starting_well=1, washing_scheme=None
+    name, csv_file, starting_well=1, washing_scheme=None, destination_plate=None
 ):
     """Generate a `dict` of a dioscuri.GeminiWorkList() and a Platefrom a csv file.
 
@@ -79,7 +79,7 @@ def create_gwl_and_platemap_from_csv(
     report += "%d transfers listed in gwl.\n" % (len(df["destination_well"]))
 
     try:
-        plate = create_destination_plate(name, df, starting_well)
+        plate = create_destination_plate(name, df, starting_well, destination_plate)
     except ValueError:
         print("Cannot create destination plate: missing content or concentration")
         plate = None
@@ -133,19 +133,24 @@ def create_gwl_record_triplet(entry, current_destination_well, washing_scheme):
     return record_triplet
 
 
-def create_destination_plate(name, df, starting_well):
+def create_destination_plate(name, df, starting_well, destination_plate=None):
     if any(pandas.isna(df.source_well_content)):
         raise ValueError
 
     if any(pandas.isna(df.source_well_concentration)):
         raise ValueError
 
-    if df.destination_plate_size[0] == 96:
-        plate = Plate96(name=name)
-    elif df.destination_plate_size[0] == 384:
-        plate = Plate384(name=name)
-    else:  # should never occur as it is also tested in the calling function.
-        raise ValueError("Only 96-well and 384-well destination plates are supported.")
+    if destination_plate is None:
+        if df.destination_plate_size[0] == 96:
+            plate = Plate96(name=name)
+        elif df.destination_plate_size[0] == 384:
+            plate = Plate384(name=name)
+        else:  # should not occur if called by create_gwl_and_platemap_from_csv()
+            raise ValueError(
+                "Only 96-well and 384-well destination plates are supported."
+            )
+    else:
+        plate = destination_plate
 
     for i, row in df.iterrows():
         well = plate.wells[row.destination_well]
