@@ -7,7 +7,7 @@ import dioscuri
 def create_gwl_and_platemap_from_csv(
     name, csv_file, starting_well=1, washing_scheme=None, destination_plate=None
 ):
-    """Generate a `dict` of a dioscuri.GeminiWorkList() and a Platefrom a csv file.
+    """Generate a `dict` of a dioscuri.GeminiWorkList() and a Plate from a csv file.
 
     **Parameters**
 
@@ -263,3 +263,41 @@ def plates_from_geneart_shipment_layout_sheet(filepath):
             well.add_content({part_label: quantity}, volume=volume_in_l)
 
     return [plate for i, plate in sorted(plates.items())]
+
+
+def make_csv_from_fragment_analyzer_report(
+    filepath,
+    destination_plate_name="ENTER DESTINATION PLATE NAME",
+    destination_plate_type="ENTER DESTINATION PLATE TYPE",
+    destination_plate_size=96,
+    volume_to_transfer="ENTER VOLUME TO TRANSFER (uL)",  # microliter
+    destination_csv=None,
+    source_plate_name="ENTER SOURCE PLATE NAME",
+    source_plate_type="ENTER SOURCE PLATE TYPE",
+    source_plate_size=96,
+):
+    df = pandas.read_csv(filepath)
+
+    if any(pandas.isna(df.best_clone)):
+        raise ValueError("Missing 'best_clone'. Delete rows that are not needed.")
+
+    plate_data = df[["construct", "best_clone"]]
+
+    plate_data = plate_data.rename(
+        columns={"construct": "source_well_content", "best_clone": "source_well"}
+    )
+
+    plate_data["source_well_concentration"] = ""
+
+    plate_data["source_plate_size"] = source_plate_size
+    plate_data["volume_to_transfer"] = volume_to_transfer
+    plate_data["source_plate_name"] = source_plate_name
+    plate_data["source_plate_type"] = source_plate_type
+    plate_data["destination_plate_name"] = destination_plate_name
+    plate_data["destination_plate_type"] = destination_plate_type
+    plate_data["destination_plate_size"] = destination_plate_size
+
+    if destination_csv is not None:
+        plate_data.to_csv(destination_csv, index=False)
+
+    return plate_data
