@@ -63,4 +63,28 @@ def test_convert_geneart_shipment_file_to_csv(tmpdir):
         destination_plate_size=384,
         destination_csv=destination_path,
     )
-    geneart_plate_csv.source_well_content[11] == "p5_ABCDE"
+    assert geneart_plate_csv.source_well_content[11] == "p5_ABCDE"
+
+
+def test_make_csv_from_fragment_analyzer_report(tmpdir):
+    destination_path = os.path.join(str(tmpdir), "fragment_analyzer_transfer.csv")
+
+    plater.make_csv_from_fragment_analyzer_report(
+        filepath="fragment_analyzer.csv",
+        destination_plate_name="Destination",
+        destination_plate_type="4ti-0960/B raised",
+        destination_plate_size=96,
+        volume_to_transfer=40,
+        destination_csv=destination_path,
+        source_plate_name="Source1",
+        source_plate_type="4ti-0960/B on CPAC",
+        source_plate_size=96,
+    )
+    fa_gwl_and_platemap = plater.create_gwl_and_platemap_from_csv(
+        name="FA_test",
+        csv_file=destination_path,
+        starting_well=1,  # default
+        washing_scheme=None,  # default
+    )
+
+    fa_gwl_and_platemap["gwl"].records_to_string()
