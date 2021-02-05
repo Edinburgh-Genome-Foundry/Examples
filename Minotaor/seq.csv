@@ -1,0 +1,3 @@
+id,type,name,sequence,dna,code,description,reference
+6xHis,seq,6xHis,HHHHHH,,,,
+TEV_site,seq,TEV site,ENLYFQG,,,Cleavage tag for the TEV protease,
