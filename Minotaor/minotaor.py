@@ -11,6 +11,17 @@ seq_dataset = pandas.read_csv(os.path.join(script_dir, "seq.csv"))
 
 
 def annotate_record(seqrecord, seq_dataset=seq_dataset):
+    """Annotate a record with a reference sequence dataset.
+
+
+    **Parameters**
+
+    **seqrecord**
+    > SeqRecord to annotate.
+
+    **seq_dataset**
+    > A minotaor sequence dataset (`pandas.DataFrame`).
+    """
     # FLAG STOP CODONS: *
     stop_positions = [i for i, letter in enumerate(str(seqrecord.seq)) if letter == "*"]
     for position in stop_positions:
