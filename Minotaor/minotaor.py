@@ -41,7 +41,9 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
     for index, sequence in enumerate(sequences):
         len_sequence = len(sequence)
         name = names[index]
-        matches = [m.start() for m in re.finditer(sequence, str(seqrecord.seq))]
+        matches = [
+            m.start() for m in re.finditer(re.escape(sequence), str(seqrecord.seq))
+        ]
         for match in matches:
             seqrecord.features.append(
                 SeqFeature(
