@@ -26,7 +26,9 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
     stop_positions = [i for i, letter in enumerate(str(seqrecord.seq)) if letter == "*"]
     for position in stop_positions:
         seqrecord.features.append(
-            SeqFeature(FeatureLocation(position, position + 1), type="STOP")
+            SeqFeature(
+                FeatureLocation(position, position + 1), type="warning", id="STOP"
+            )
         )
     # ANNOTATE SEQUENCES
     sequences = seq_dataset["sequence"].to_list()
@@ -37,7 +39,9 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
         matches = [m.start() for m in re.finditer(sequence, str(seqrecord.seq))]
         for match in matches:
             seqrecord.features.append(
-                SeqFeature(FeatureLocation(match, (match + len_sequence)), type=name)
+                SeqFeature(
+                    FeatureLocation(match, (match + len_sequence)), type="CDS", id=name
+                )
             )
 
     return seqrecord
