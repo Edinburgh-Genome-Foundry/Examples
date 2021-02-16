@@ -22,6 +22,11 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
     **seq_dataset**
     > A minotaor sequence dataset (`pandas.DataFrame`).
     """
+    # FLAG NO START: M
+    if str(seqrecord.seq)[0] != "M":
+        seqrecord.features.append(
+            SeqFeature(FeatureLocation(0, 1), type="warning", id="no start codon")
+        )
     # FLAG STOP CODONS: *
     stop_positions = [i for i, letter in enumerate(str(seqrecord.seq)) if letter == "*"]
     for position in stop_positions:
