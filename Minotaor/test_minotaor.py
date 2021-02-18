@@ -13,3 +13,10 @@ def test_annotate_record():
     assert protein_record.features[0].id == "no start codon"
     assert protein_record.features[1].id == "STOP"
     assert protein_record.features[3].id == "6xHis"
+
+
+def test_create_and_annotate_record():
+    protein_record = minotaor.create_and_annotate_record("HHHHHH")
+
+    assert type(protein_record) == minotaor.SeqRecord
+    assert protein_record.features[0].id == "no start codon"
