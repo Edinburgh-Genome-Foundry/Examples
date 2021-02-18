@@ -91,3 +91,4 @@ Furin_site_PEA,seq,Furin cleavage site,TRHRQPRGWE,,,,Cleavable linker,"Chen et a
 Furin_site_diphteria,seq,Furin site from diphteria,AGNRVRRSVG,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
 Furin_site_polyarginine,seq,Polyarginine tract for furin cleavage,RRRRRRRRR,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
 Cathepsin_B_site,seq,Cathepsin B site,GFLG,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
+FLAG_tag_pattern,pattern,FLAG tag,DYKDDD[D|K],,,,,

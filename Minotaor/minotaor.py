@@ -45,8 +45,8 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
             )
         )
     # ANNOTATE SEQUENCES
-    sequences = seq_dataset["sequence"].to_list()
-    names = seq_dataset["name"].to_list()
+    sequences = seq_dataset.loc[seq_dataset["type"] == "seq"]["sequence"].to_list()
+    names = seq_dataset.loc[seq_dataset["type"] == "seq"]["name"].to_list()
     for index, sequence in enumerate(sequences):
         len_sequence = len(sequence)
         name = names[index]
@@ -58,6 +58,16 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
                 SeqFeature(
                     FeatureLocation(match, (match + len_sequence)), type="CDS", id=name
                 )
+            )
+    # ANNOTATE PATTERNS
+    patterns = seq_dataset.loc[seq_dataset["type"] == "pattern"]["sequence"].to_list()
+    names = seq_dataset.loc[seq_dataset["type"] == "pattern"]["name"].to_list()
+    for index, pattern in enumerate(patterns):
+        name = names[index]
+        matches = {m.start(): m.end() for m in re.finditer(pattern, str(seqrecord.seq))}
+        for start, end in matches.items():
+            seqrecord.features.append(
+                SeqFeature(FeatureLocation(start, end), type="CDS", id=name)
             )
 
     return seqrecord
