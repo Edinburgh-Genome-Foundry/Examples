@@ -27,6 +27,15 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
         seqrecord.features.append(
             SeqFeature(FeatureLocation(0, 1), type="warning", id="no start codon")
         )
+    # FLAG NO END: *
+    if str(seqrecord.seq)[-1] != "*":
+        seqrecord.features.append(
+            SeqFeature(
+                FeatureLocation(len(seqrecord) - 1, len(seqrecord)),
+                type="warning",
+                id="not a stop codon",
+            )
+        )
     # FLAG STOP CODONS: *
     stop_positions = [i for i, letter in enumerate(str(seqrecord.seq)) if letter == "*"]
     for position in stop_positions:
