@@ -52,3 +52,22 @@ def annotate_record(seqrecord, seq_dataset=seq_dataset):
             )
 
     return seqrecord
+
+
+def create_and_annotate_record(sequence, seq_dataset=seq_dataset):
+    """Create a SeqRecord from an amino acid sequence string.
+
+    **Parameters**
+
+    **sequence**
+    > Sequence (`str`).
+    """
+    if seq_dataset is None:
+        seq_dataset = seq_dataset
+    protein = Seq(sequence)
+    protein_record = SeqRecord(
+        protein, id="example", annotations={"molecule_type": "protein"}
+    )
+    protein_record = annotate_record(protein_record)
+
+    return protein_record
