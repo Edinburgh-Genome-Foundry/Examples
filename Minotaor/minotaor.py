@@ -90,3 +90,59 @@ def create_and_annotate_record(sequence, seq_dataset=seq_dataset):
     protein_record = annotate_record(protein_record)
 
     return protein_record
+
+
+def convert_prosite_to_regex(prosite_string):
+    """Convert a PROSITE motif string to a regex string.
+
+    **Parameters**
+
+    **prosite_string**
+    > The PROSITE string (`str`).
+    """
+    # Implemented with a hack: by replacing characters, instead of using a lexer.
+    # See https://prosite.expasy.org/prosuser.html#conv_pa for definition.
+    # Remove period that ends the pattern:
+    if prosite_string[-1] == ".":
+        prosite_string = prosite_string[:-1]
+    else:
+        raise ValueError("Invalid format: a period ('.') must end the pattern")
+
+    # N- and C-terminal restrictions:
+    if "<" in prosite_string:
+        N_terminal = True
+        prosite_string = prosite_string.replace("<", "")
+    else:
+        N_terminal = False
+    if ">" in prosite_string:
+        if prosite_string[-1] != ">":
+            raise Exception("'>' inside square brackets is not supported yet")
+        C_terminal = True
+        prosite_string = prosite_string.replace(">", "")
+    else:
+        C_terminal = False
+
+    tokens = prosite_string.split("-")
+    regex_tokens = []
+    for token in tokens:
+        # Convert 'x' to regex: any amino acid, but don't match stop codons.
+        token = token.replace("x", "[^\\*]")
+
+        # Replace braces for exceptions.
+        if token[0] == "{":
+            token = token.replace("{", "[^")
+            token = token.replace("}", "]")
+
+        # Replace for repetition. Must come after exception replacement.
+        token = token.replace("(", "{")
+        token = token.replace(")", "}")
+
+        regex_tokens += [token]
+
+    regex = "".join(regex_tokens)
+    if N_terminal:
+        regex = "^" + regex
+    if C_terminal:
+        regex += "$"
+
+    return regex
