@@ -7,8 +7,7 @@ C_tag,seq,C-tag,EPEA,,,,,
 Calmodulin_tag,seq,Calmodulin-tag,KRRWKKNFIAVSAANRFKKISSSGAL,,,,Calmodulin-binding peptide (CBP),
 Polyglutamate_tag,seq,Polyglutamate tag,EEEEEE,,,,,
 E_tag,seq,E-tag,GAPVPYPDPLEPR,,,,Recognized by an antibody,
-FLAG_tag,seq,FLAG-tag,DYKDDDDK,,,,Recognized by an antibody,
-HA_tag,seq,HA-tag,YPYDVPDYA,,,,Recognized by an antibody,
+HA_tag,pattern,HA-tag,(Y[P|A]YDVPDYA)|(YDVPDYASL),,,,Recognized by an antibody,
 Myc_tag,seq,Myc-tag,EQKLISEEDL,,,,Recognized by an antibody,
 NE_tag,seq,NE-tag,TKENPRSNQEESYDDNES,,,,Recognized by an antibody,
 Rho1D4_tag,seq,Rho1D4-tag,TETSQVAPA,,,,For purification of membrane proteins,
@@ -47,7 +46,7 @@ RKK_ribo_collision,seq,RKK ribosome collision site,RKK,,,,Amino acid sequence en
 RHK_ribo_collision,seq,RHK ribosome collision site,RHK,,,,Amino acid sequence enriched in ribosome collision site,"Han et al. (2020), Cell Reports 31, 107610"
 RMK_ribo_collision,seq,RMK ribosome collision site,RMK,,,,Amino acid sequence enriched in ribosome collision site,"Han et al. (2020), Cell Reports 31, 107610"
 RIK_ribo_collision,seq,RIK ribosome collision site,RIK,,,,Amino acid sequence enriched in ribosome collision site,"Han et al. (2020), Cell Reports 31, 107610"
-PPP_bond,seq,Poly-Pro bond,PPP,,,,The synthesis of Pro–Pro bonds is slow,"Schuller et al. (2018), Nat Rev Mol Cell Biol 19, 526–541"
+PPP_bond,seq,Poly-Pro bond,PPP+,,,,The synthesis of Pro-Pro bonds is slow,"Schuller et al. (2018), Nat Rev Mol Cell Biol 19, 526–541"
 GPP_pause_site,seq,GPP pause site,GPP,,,,"Translation pauses strongly at Pro-Pro
 when Gly, Asp or Ala codons are positioned in the E site","Buskirk et al. (2017), Phil. Trans. R. Soc. B 372: 20160183"
 DPP_pause_site,seq,DPP pause site,DPP,,,,"Translation pauses strongly at Pro-Pro
@@ -91,4 +90,6 @@ Furin_site_PEA,seq,Furin cleavage site,TRHRQPRGWE,,,,Cleavable linker,"Chen et a
 Furin_site_diphteria,seq,Furin site from diphteria,AGNRVRRSVG,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
 Furin_site_polyarginine,seq,Polyarginine tract for furin cleavage,RRRRRRRRR,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
 Cathepsin_B_site,seq,Cathepsin B site,GFLG,,,,Cleavable linker,"Chen et al. (2013), Adv Drug Deliv Rev 65(10): 1357–1369"
-FLAG_tag_pattern,pattern,FLAG tag,DYKDDD[D|K],,,,,
+FLAG_tag_pattern,pattern,FLAG tag,DYKDDD[D|K|DK],,,,"Recognized by an antibody, for purification; has enterokinase cleavage site",
+Polyarginine_tag_pattern,pattern,Polyarginine tag,"R{5,9}",,,,Binds efficiently to cation-exchange resin,
+His_tag_pattern,pattern,His tag,"H{5,10}",,,,Bound by a nickel or cobalt chelate,
