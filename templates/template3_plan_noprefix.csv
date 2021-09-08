@@ -1,0 +1,3 @@
+CONSTRUCT_1,HC_Amp_ccdB,FLP,promoter_1,GFP,terminator_1,insulator
+CONSTRUCT_2,HC_Amp_ccdB,FLP,promoter_2,GFP,terminator_1,insulator
+CONSTRUCT_3,HC_Amp_ccdB,FLP,promoter_2,RFP,terminator_2,insulator
