@@ -29,6 +29,9 @@ def create_gwl_and_platemap_from_csv(
         destination_plate_type  # only one destination plate
         destination_plate_size  # only one destination plate (only `96` or `384`)
 
+    > If there is a 'destination_well' column, then it is used and 'starting_well'
+    parameter is ignored.
+
     **starting_well**
     > The index of the starting well: skip wells before starting well. Default `1`.
 
@@ -52,41 +55,60 @@ def create_gwl_and_platemap_from_csv(
     if set(df.source_plate_size) - set([96, 384]) != set():
         raise ValueError("Only 96-well and 384-well source plates are supported.")
 
-    if (starting_well + len(df.destination_plate_type)) > int(
-        df.destination_plate_size[0] + 1
-    ):  # add 1 because starting_well is not zero-based
-        raise ValueError("Cannot do transfer: starting well value is too big")
-
-    # dioscuri.GeminiWorkList:
-    gwl = create_worklist_data_object(name, df, starting_well, washing_scheme)
-
-    destination_well_list = list(
-        range(starting_well, (starting_well + len(df.destination_plate_type)))
-    )
-    print(destination_well_list)
-    wellnames = [
-        plateo.tools.index_to_wellname(
-            index=index, num_wells=df.destination_plate_size[0], direction="column"
+    if "destination_well" in df.columns:
+        # dioscuri.GeminiWorkList:
+        gwl = create_worklist_data_object_using_destination_wells(
+            name, df, washing_scheme
         )
-        for index in destination_well_list
-    ]
-    df["destination_well"] = wellnames
+        report += "%d transfers listed in gwl.\n" % (len(df["destination_well"]))
 
-    report += "The starting destination well position is %d (%s).\n" % (
-        starting_well,
-        df["destination_well"][0],
-    )
-    report += "%d transfers listed in gwl.\n" % (len(df["destination_well"]))
+        try:
+            plate = create_destination_plate(name, df, destination_plate)
+        except Exception as e:
+            print("Cannot create destination plate!")
+            print(e)
+            plate = None
+            report += "\nDestination plate not created.\n"
 
-    try:
-        plate = create_destination_plate(name, df, starting_well, destination_plate)
-    except Exception as e:
-        print("Cannot create destination plate!")
-        print(e)
-        plate = None
-        report += "\nDestination plate not created.\n"
+        return {"gwl": gwl, "plate": plate, "report": report}
 
-    return {"gwl": gwl, "plate": plate, "report": report}
+    else:  # original workflow
+
+        if (starting_well + len(df.destination_plate_type)) > int(
+            df.destination_plate_size[0] + 1
+        ):  # add 1 because starting_well is not zero-based
+            raise ValueError("Cannot do transfer: starting well value is too big")
+
+        # dioscuri.GeminiWorkList:
+        gwl = create_worklist_data_object(name, df, starting_well, washing_scheme)
+
+        destination_well_list = list(
+            range(starting_well, (starting_well + len(df.destination_plate_type)))
+        )
+        print(destination_well_list)
+        wellnames = [
+            plateo.tools.index_to_wellname(
+                index=index, num_wells=df.destination_plate_size[0], direction="column"
+            )
+            for index in destination_well_list
+        ]
+        df["destination_well"] = wellnames
+
+        report += "The starting destination well position is %d (%s).\n" % (
+            starting_well,
+            df["destination_well"][0],
+        )
+        report += "%d transfers listed in gwl.\n" % (len(df["destination_well"]))
+
+        try:
+            plate = create_destination_plate(name, df, destination_plate)
+        except Exception as e:
+            print("Cannot create destination plate!")
+            print(e)
+            plate = None
+            report += "\nDestination plate not created.\n"
+
+        return {"gwl": gwl, "plate": plate, "report": report}
 
 
 def create_gwl_record_triplet(entry, current_destination_well, washing_scheme):
@@ -134,7 +156,7 @@ def create_gwl_record_triplet(entry, current_destination_well, washing_scheme):
     return record_triplet
 
 
-def create_destination_plate(name, df, starting_well, destination_plate=None):
+def create_destination_plate(name, df, destination_plate=None):
     if any(pandas.isna(df.source_well_content)):
         raise ValueError("Error: missing content")
 
@@ -155,10 +177,10 @@ def create_destination_plate(name, df, starting_well, destination_plate=None):
 
     for i, row in df.iterrows():
         well = plate.wells[row.destination_well]
-        if not well.is_empty:
-            raise ValueError(
-                "Error: destination plate well %s is not empty" % row.destination_well
-            )
+        # if not well.is_empty:
+        #     raise ValueError(
+        #         "Error: destination plate well %s is not empty" % row.destination_well
+        #     )
         well.data = {"source_well_content": row.source_well_content}
         volume_microl = row["volume_to_transfer"]  # microliter (uL)
         volume_in_l = volume_microl * 1e-6
@@ -167,6 +189,31 @@ def create_destination_plate(name, df, starting_well, destination_plate=None):
         well.add_content({part_label: quantity}, volume=volume_in_l)
 
     return plate
+
+
+def create_worklist_data_object_using_destination_wells(
+    name, df, washing_scheme,
+):
+    """Alternative version for case where destination well is specified."""
+
+    records = []
+    destination_plate_size = int(df.destination_plate_size[0])
+
+    for index, row in df.iterrows():
+        tecan_destination_well = plateo.tools.wellname_to_index(
+            wellname=row.destination_well,
+            num_wells=destination_plate_size,
+            direction="column",
+        )
+
+        gwl_record_triplet = create_gwl_record_triplet(
+            row, tecan_destination_well, washing_scheme
+        )
+        records += gwl_record_triplet
+
+    worklist = dioscuri.GeminiWorkList(name=name, records=records)
+
+    return worklist
 
 
 def create_worklist_data_object(
