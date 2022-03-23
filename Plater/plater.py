@@ -5,7 +5,12 @@ import dioscuri
 
 
 def create_gwl_and_platemap_from_csv(
-    name, csv_file, starting_well=1, washing_scheme=None, destination_plate=None
+    name,
+    csv_file,
+    starting_well=1,
+    washing_scheme=None,
+    destination_plate=None,
+    destination_specified=False,
 ):
     """Generate a `dict` of a dioscuri.GeminiWorkList() and a Plate from a csv file.
 
@@ -29,18 +34,32 @@ def create_gwl_and_platemap_from_csv(
         destination_plate_type  # only one destination plate
         destination_plate_size  # only one destination plate (only `96` or `384`)
 
-    > If there is a 'destination_well' column, then it is used and 'starting_well'
-    parameter is ignored.
+    > Optional column: 'destination_well'. Set 'destination_specified' True to use it.
 
     **starting_well**
     > The index of the starting well: skip wells before starting well. Default `1`.
 
     **washing_scheme**
     > The washing_scheme (1-4) to use between the transfers. Default uses "W;".
+
+    **destination_plate**
+    > The destination plate. Default `None` creates a new empty destination plate.
+
+    **destination_specified**
+    > `bool`. If True, then use the 'destination_well' column,
+    and ignore 'starting_well' parameter.
     """
+    if destination_specified:
+        print("Destination wells are specified. Ignoring 'starting_well' parameter.")
+
     report = ""  # this collects various results during run
 
     df = pandas.read_csv(csv_file)  # read_transfer_table
+
+    if "destination_well" in df.columns and not destination_specified:
+        print(
+            "'destination_specified' is set to False: ignoring 'destination_well' column."
+        )
 
     # Input checks:
     if not len(set(df.destination_plate_name)) == 1:
@@ -55,7 +74,7 @@ def create_gwl_and_platemap_from_csv(
     if set(df.source_plate_size) - set([96, 384]) != set():
         raise ValueError("Only 96-well and 384-well source plates are supported.")
 
-    if "destination_well" in df.columns:
+    if destination_specified:
         # dioscuri.GeminiWorkList:
         gwl = create_worklist_data_object_using_destination_wells(
             name, df, washing_scheme
