@@ -1,6 +1,14 @@
 # Templates
 
-This directory contains Python notebook templates for DNA assembly design.
+This directory contains Python script and notebook templates for DNA assembly design.
+
+`autoannotate_plasmid.ipynb`: auto-annotate a plasmid using a reference sequence dataset and GeneBlocks.
+
+`bandwitch_example.ipynb`: a BandWitch example.
+
+`count_dna.py`: count sequences and basepairs in a FASTA.
+
+`EnforceDigestion.ipynb`: add restriction site to a set of sequences.
 
 `template1.ipynb` is used for a standard assembly design workflow.
 
