@@ -1,0 +1,28 @@
+LOCUS       Exported                 119 bp ds-DNA     linear   UNA 31-JUL-2024
+DEFINITION  natural linear DNA.
+ACCESSION   .
+VERSION     .
+KEYWORDS    .
+SOURCE      natural DNA sequence
+  ORGANISM  unspecified
+REFERENCE   1  (bases 1 to 119)
+  AUTHORS   EGF
+  TITLE     Direct Submission
+  JOURNAL   Exported Wednesday, Jul 31, 2024 from SnapGene 5.0.8
+            https://www.snapgene.com
+FEATURES             Location/Qualifiers
+     source          1..119
+                     /organism="unspecified"
+                     /mol_type="genomic DNA"
+     misc_feature    1..36
+                     /label=@cds
+     intron          37..56
+                     /label=fake_intron
+     misc_feature    37..56
+                     /label=@keep
+     misc_feature    57..119
+                     /label=@cds
+ORIGIN
+        1 atggacctca ggcacgctcg ccggcccttc ctgatcagcg catgctatcg tatagcctaa
+       61 ctagatcctt tacggaaccg catctcctaa aatgtgccga gggttgggca ctgcggtaa
+//
